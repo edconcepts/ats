@@ -38,7 +38,19 @@ Route::middleware('auth')->group(function () {
 Route::prefix('hr')->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('HR/Dashboard');
-    });
+    })->name('hr.dashboard');
+
+    Route::get('/statuses', function () {
+        return Inertia::render('HR/Statuses/Overview');
+    })->name('hr.statuses');
+
+    Route::get('/statuses/create', function () {
+        return Inertia::render('HR/Statuses/Create');
+    })->name('hr.statuses.create');
+
+    Route::get('/locations', function () {
+        return Inertia::render('HR/Locations');
+    })->name('hr.locations');
 });
 
 require __DIR__.'/auth.php';
