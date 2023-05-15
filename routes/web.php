@@ -66,7 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::prefix('hr')->middleware('role:hr')->group(function () {
+Route::prefix('hr')->middleware(['auth', 'role:hr'])->group(function () {
     Route::get('/dashboard', function () {
         return Inertia::render('HR/Dashboard');
     })->name('hr.dashboard');
