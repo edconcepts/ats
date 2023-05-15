@@ -4,16 +4,18 @@ import { Head } from '@inertiajs/vue3';
 import {ref} from "vue";
 import {Link} from "@inertiajs/vue3";
 
-const statuses = ref([
-    { id: 1, name: 'Gesolliciteerd' },
-    { id: 2, name: 'Afgewezen' },
-    { id: 3, name: 'Gebeld geen contact' },
-    { id: 4, name: '2e keer gebeld geen contact' },
-    { id: 5, name: 'Gesprek ingepland' },
-    { id: 6, name: '2e gesprek ingepland' },
-    { id: 7, name: 'Contract aangeboden' },
-    { id: 8, name: 'Hired' },
-]);
+defineProps({
+    statuses : Array
+});
+// const statuses = ref([
+//     { id: 1, name: 'Gesolliciteerd' },
+//     { id: 2, name: 'Afgewezen' },
+//     { id: 3, name: 'Gebeld geen contact' },
+//     { id: 4, name: '2e keer gebeld geen contact' },
+//     { id: 5, name: 'Gesprek ingepland' },
+//     { id: 6, name: '2e gesprek ingepland' },
+
+// ]);
 </script>
 
 <template>

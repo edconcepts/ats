@@ -1,8 +1,6 @@
 <?php
 
-
-
-
+use App\Http\Controllers\Hr\StatusController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -71,9 +69,7 @@ Route::prefix('hr')->middleware(['auth', 'role:hr'])->group(function () {
         return Inertia::render('HR/Dashboard');
     })->name('hr.dashboard');
 
-    Route::get('/statuses', function () {
-        return Inertia::render('HR/Statuses/Overview');
-    })->name('hr.statuses');
+    Route::get('/statuses', [StatusController::class, 'index'])->name('hr.statuses');
 
     Route::get('/statuses/create', function () {
         return Inertia::render('HR/Statuses/Create');
