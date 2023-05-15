@@ -5,7 +5,7 @@ namespace App\Actions;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 
-class Import
+class ImportAction
 {
     // public function __construct(
     //     private string $url = 'http://staging.werkenbijkik.nl/wp-json/wp/v2/solicitaties',
@@ -22,7 +22,7 @@ class Import
     {
         $rawData = Http::get($url)->json();
 
-        $extractedData = [];
+        $extractedData = collect();
 
         foreach($rawData as $application)
         {
@@ -31,7 +31,8 @@ class Import
             {
                 $data[$key] = Arr::get($application, $value);
             }
-            $extractedData [] = $data;
+
+            $extractedData->push($data);
         }
         return $extractedData;
     }

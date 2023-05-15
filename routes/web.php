@@ -1,11 +1,10 @@
 <?php
 
-use App\Actions\Import;
-use App\Actions\Imports\ImportApplication;
+
+
+
 use App\Http\Controllers\ProfileController;
-use App\Models\Application;
-use App\Models\Location;
-use App\Models\Vacancy;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -20,7 +19,7 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/test',function(Import $a){
+Route::get('/test',function(){
     //paterns
     // $pattern = [
     //     'name' => 'name',
