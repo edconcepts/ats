@@ -5,16 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Status extends Model
+class StatusEmail extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
 
-
     // relationships
-    public function emails()
+    public function status()
     {
-        return $this->hasOne(StatusEmail::class);
+        return $this->belongsTo(Status::class);
     }
+
 }

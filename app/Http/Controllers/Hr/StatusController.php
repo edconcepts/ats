@@ -17,9 +17,23 @@ class StatusController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        return Inertia::render('HR/Statuses/Create');
+    }
+
     public function store(StoreStatusRequest $request)
     {
-        dd($request);
+        $status = Status::create(['name'=> $request->name]);
+
+        if($request->email['subject']){
+            $status->emails()->create([
+                'subject' => $request->email['subject'],
+                'body' => $request->email['body']
+            ]);
+        }
+
+        return redirect(route('hr.statuses'));
     }
 
 }

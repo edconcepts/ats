@@ -64,21 +64,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::prefix('hr')->middleware(['auth', 'role:hr'])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('HR/Dashboard');
-    })->name('hr.dashboard');
-
-    Route::get('/statuses', [StatusController::class, 'index'])->name('hr.statuses');
-    Route::post('/statuses', [StatusController::class, 'store'])->name('hr.statuses.store');
-
-    Route::get('/statuses/create', function () {
-        return Inertia::render('HR/Statuses/Create');
-    })->name('hr.statuses.create');
-
-    Route::get('/locations', function () {
-        return Inertia::render('HR/Locations');
-    })->name('hr.locations');
-});
-
 require __DIR__.'/auth.php';

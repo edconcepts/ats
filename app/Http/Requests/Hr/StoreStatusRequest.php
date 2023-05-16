@@ -21,10 +21,11 @@ class StoreStatusRequest extends FormRequest
      */
     public function rules(): array
     {
+        //TODO change the messages
         return [
             'name' => ['required', 'max:120'],
-            'email.subject' => ['required', 'max:120'],
-            'email.body' => ['required', 'max:500'],
+            'email.subject' => ['required_with:email.body', 'max:120'],
+            'email.body' => ['required_with:email.subject', 'max:500'],
         ];
     }
 }

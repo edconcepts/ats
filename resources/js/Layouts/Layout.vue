@@ -109,7 +109,7 @@ import {
 const navigation = [
     { name: 'Dashboard', href: route('hr.dashboard'), icon: HomeIcon, current: route().current('hr.dashboard') },
     { name: 'Locaties', href: route('hr.locations'), icon: MapPinIcon, current: route().current('hr.locations') },
-    { name: 'Statussen', href: route('hr.statuses'), icon: TagIcon, current: route().current('hr.statuses*') },
+    { name: 'Statussen', href: route('hr.statuses.index'), icon: TagIcon, current: route().current('hr.statuses*') },
     { name: 'Uitloggen', href: '#', icon: ArrowLeftOnRectangleIcon, current: false },
 ]
 
