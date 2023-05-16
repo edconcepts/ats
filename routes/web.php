@@ -70,6 +70,7 @@ Route::prefix('hr')->middleware(['auth', 'role:hr'])->group(function () {
     })->name('hr.dashboard');
 
     Route::get('/statuses', [StatusController::class, 'index'])->name('hr.statuses');
+    Route::post('/statuses', [StatusController::class, 'store'])->name('hr.statuses.store');
 
     Route::get('/statuses/create', function () {
         return Inertia::render('HR/Statuses/Create');
