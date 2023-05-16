@@ -17,4 +17,9 @@ class Status extends Model
     {
         return $this->hasOne(StatusEmail::class);
     }
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
 }

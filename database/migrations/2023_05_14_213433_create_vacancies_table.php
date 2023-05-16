@@ -17,7 +17,9 @@ return new class extends Migration
             $table->string('slug');
             $table->string('title')->nullable();
             $table->timestamp('kik_date');
-            $table->foreignId('location_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('location_id')->constrained(
+                'locations', 'kik_id'
+            )->cascadeOnDelete();
             $table->timestamps();
         });
     }

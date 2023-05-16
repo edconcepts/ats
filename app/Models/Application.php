@@ -19,4 +19,8 @@ class Application extends Model
         return $this->belongsTo(Vacancy::class, 'vacancy_id', 'kik_id');
     }
 
+    public function status()
+    {
+        return $this->belongsTo(Status::class);
+    }
 }
