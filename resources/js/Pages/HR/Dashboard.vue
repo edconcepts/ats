@@ -11,20 +11,23 @@ import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } fro
 import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 
 
-const statusses = ref([
-    { name: 'Gesolliciteerd', candidates: [
-        { id: 1, name: 'John Doe', date: '09-05-2023', job: 'Bijbaan vacature', },
-        { id: 2, name: 'Arko Elsenaar', date: '09-05-2023', job: 'Bijbaan vacature', },
-        { id: 3, name: 'Enrico Duinkerken', date: '09-05-2023', job: 'Bijbaan vacature', },
-    ] },
-    { name: 'Afgewezen', candidates: [] },
-    { name: 'Gebeld geen contact', candidates: [], },
-    { name: '2e keer gebeld geen contact', candidates: [], },
-    { name: 'Gesprek ingepland', candidates: [], },
-    { name: '2e gesprek ingepland', candidates: [], },
-    { name: 'Contract aangeboden', candidates: [], },
-    { name: 'Hired', candidates: [], },
-]);
+// const statuses = ref([
+    // { name: 'Gesolliciteerd', candidates: [
+    //     { id: 1, name: 'John Doe', date: '09-05-2023', job: 'Bijbaan vacature', },
+    //     { id: 2, name: 'Arko Elsenaar', date: '09-05-2023', job: 'Bijbaan vacature', },
+    //     { id: 3, name: 'Enrico Duinkerken', date: '09-05-2023', job: 'Bijbaan vacature', },
+    // ] },
+//     { name: 'Afgewezen', candidates: [] },
+//     { name: 'Gebeld geen contact', candidates: [], },
+//     { name: '2e keer gebeld geen contact', candidates: [], },
+//     { name: 'Gesprek ingepland', candidates: [], },
+//     { name: '2e gesprek ingepland', candidates: [], },
+//     { name: 'Contract aangeboden', candidates: [], },
+//     { name: 'Hired', candidates: [], },
+// ]);
+defineProps({
+    statuses : Object
+});
 
 const changes = ref({
     oldStatus: null,
@@ -45,8 +48,8 @@ const onDragEnd = (event, statusIndex) => {
 
 const revertChanges = () => {
     // TODO: maybe find a way to keep the old indexes?
-    statusses.value[changes.value.oldStatus].candidates.push(changes.value.element);
-    statusses.value[changes.value.newStatus].candidates.splice(changes.value.element, 1);
+    statuses.value[changes.value.oldStatus].candidates.push(changes.value.element);
+    statuses.value[changes.value.newStatus].candidates.splice(changes.value.element, 1);
 
     changes.value = {
         oldStatus: null,
@@ -62,6 +65,10 @@ const saveChanges = () => {
         element: null,
     };
 }
+
+const updateApplicationStatus = () => {
+
+};
 </script>
 
 <template>
@@ -82,11 +89,11 @@ const saveChanges = () => {
             </div>
         </div>
         <div class="flex gap-8 overflow-auto h-full pb-8">
-            <div v-for="(status, index) in statusses" class="bg-white shadow-sm basis-80 flex-shrink-0">
+            <div v-for="(status, index) in statuses" class="bg-white shadow-sm basis-80 flex-shrink-0">
                 <div class="text-gray-900 bg-red-400 text-white font-bold text-lg px-4 py-3 border-b border-gray-50">
                     {{ status.name }}</div>
                 <draggable
-                    :list="statusses[index].candidates"
+                    :list="statuses[index].candidates"
                     group="candidates"
                     item-key="id"
                     ghost-class="ghosting"
@@ -127,7 +134,7 @@ const saveChanges = () => {
                                     <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                         <DialogTitle as="h3" class="text-base font-semibold leading-6 text-gray-900">Status wijzigen</DialogTitle>
                                         <div class="mt-2">
-                                            <p class="text-sm text-gray-500">Weet je zeker dat je <span class="font-bold">{{ changes.element?.name }}</span> wilt verplaatsen naar <span class="font-bold">{{ statusses[changes?.newStatus]?.name }}</span>?</p>
+                                            <p class="text-sm text-gray-500">Weet je zeker dat je <span class="font-bold">{{ changes.element?.name }}</span> wilt verplaatsen naar <span class="font-bold">{{ statuses[changes?.newStatus]?.name }}</span>?</p>
                                         </div>
                                     </div>
                                 </div>

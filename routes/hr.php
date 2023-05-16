@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\Hr\LocationController;
+use App\Http\Controllers\HR\DashboardController;
+use App\Http\Controllers\HR\LocationController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Hr\StatusController;
+use App\Http\Controllers\HR\StatusController;
 use Inertia\Inertia;
 
-Route::get('/dashboard', function () {
-    return Inertia::render('HR/Dashboard');
-})->name('dashboard');
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
 Route::resource('/statuses', StatusController::class)->only([
     'index', 'store' , 'create'
