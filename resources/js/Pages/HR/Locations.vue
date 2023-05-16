@@ -7,10 +7,14 @@ import {ref} from "vue";
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 
-const locations = ref([
-    { id: 1, name: 'Londen' },
-    { id: 2, name: 'Amsterdam' },
-]);
+defineProps({
+    locations : Array
+});
+// const locations = ref([
+//     { id: 1, name: 'Londen' },
+//     { id: 2, name: 'Amsterdam' },
+// ]);
+
 </script>
 
 <template>
