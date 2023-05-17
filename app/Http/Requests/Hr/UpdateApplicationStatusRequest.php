@@ -4,7 +4,7 @@ namespace App\Http\Requests\HR;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreStatusRequest extends FormRequest
+class UpdateApplicationStatusRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,11 +21,8 @@ class StoreStatusRequest extends FormRequest
      */
     public function rules(): array
     {
-        //TODO change the messages
         return [
-            'name' => ['required', 'max:120'],
-            'email.subject' => ['required_with:email.body', 'max:120'],
-            'email.body' => ['required_with:email.subject', 'max:500'],
+            'status' => ['required', 'exists:statuses,id']
         ];
     }
 }

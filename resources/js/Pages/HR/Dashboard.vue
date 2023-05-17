@@ -1,6 +1,7 @@
 <script setup>
 import Layout from '@/Layouts/Layout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
+
 import { MagnifyingGlassIcon, ArchiveBoxArrowDownIcon } from "@heroicons/vue/24/outline";
 import draggable from "vuedraggable/src/vuedraggable";
 import {onMounted, ref} from "vue";
@@ -25,7 +26,7 @@ import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 //     { name: 'Contract aangeboden', candidates: [], },
 //     { name: 'Hired', candidates: [], },
 // ]);
-defineProps({
+const props = defineProps({
     statuses : Object
 });
 
@@ -48,8 +49,8 @@ const onDragEnd = (event, statusIndex) => {
 
 const revertChanges = () => {
     // TODO: maybe find a way to keep the old indexes?
-    statuses.value[changes.value.oldStatus].candidates.push(changes.value.element);
-    statuses.value[changes.value.newStatus].candidates.splice(changes.value.element, 1);
+    props.statuses[changes.value.oldStatus].candidates.push(changes.value.element);
+    props.statuses[changes.value.newStatus].candidates.splice(changes.value.element, 1);
 
     changes.value = {
         oldStatus: null,
@@ -59,6 +60,7 @@ const revertChanges = () => {
 };
 
 const saveChanges = () => {
+    updateApplicationStatus(changes.value.element.id, props.statuses[changes.value.newStatus].id);
     changes.value = {
         oldStatus: null,
         newStatus: null,
@@ -66,8 +68,10 @@ const saveChanges = () => {
     };
 }
 
-const updateApplicationStatus = () => {
-
+const updateApplicationStatus = (application,status) => {
+    router.put(route('hr.applications.status.update',application), {
+        status: status
+    });
 };
 </script>
 
@@ -84,7 +88,13 @@ const updateApplicationStatus = () => {
                 <form class="relative flex flex-1" action="#" method="GET">
                     <label for="search-field" class="sr-only">Zoeken</label>
                     <MagnifyingGlassIcon class="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400" aria-hidden="true" />
-                    <input id="search-field" class="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm" placeholder="Zoeken door alle vacatures" type="search" name="search" />
+                    <input
+                        id="search-field"
+                        class="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
+                        placeholder="Zoeken door alle vacatures"
+                        type="search"
+                        name="search"
+                    />
                 </form>
             </div>
         </div>
@@ -98,7 +108,7 @@ const updateApplicationStatus = () => {
                     item-key="id"
                     ghost-class="ghosting"
                     drag-class="dragging"
-                    @change="onDragEnd($event, index)"
+                    @change="onDragEnd($event,index )"
                     class="bg-white min-h-[100px]"
                     ref="parent"
                 >
@@ -119,7 +129,15 @@ const updateApplicationStatus = () => {
 
         <TransitionRoot as="template" :show="changes.newStatus !== null">
             <Dialog as="div" class="relative z-50">
-                <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
+                <TransitionChild
+                    as="template"
+                    enter="ease-out duration-300"
+                    enter-from="opacity-0"
+                    enter-to="opacity-100"
+                    leave="ease-in duration-200"
+                    leave-from="opacity-100"
+                    leave-to="opacity-0"
+                >
                     <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
                 </TransitionChild>
 

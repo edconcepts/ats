@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HR\ApplicationStatusController;
 use App\Http\Controllers\HR\DashboardController;
 use App\Http\Controllers\HR\LocationController;
 use Illuminate\Support\Facades\Route;
@@ -12,6 +13,6 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::resource('/statuses', StatusController::class)->only([
     'index', 'store' , 'create'
 ]);
-
+Route::put('/applications/{application}/status', [ApplicationStatusController::class, 'update'])->name('applications.status.update');
 Route::get('/locations' , [LocationController::class, 'index'])->name('locations.index');
 

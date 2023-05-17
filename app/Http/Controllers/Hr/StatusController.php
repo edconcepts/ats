@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\HR;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Hr\StoreStatusRequest;
+use App\Http\Requests\HR\StoreStatusRequest;
 use App\Models\Status;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
