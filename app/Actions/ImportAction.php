@@ -2,23 +2,25 @@
 
 namespace App\Actions;
 
+use App\Contracts\Importable;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 
 class ImportAction
 {
-    // public function __construct(
-    //     private string $url = 'http://staging.werkenbijkik.nl/wp-json/wp/v2/solicitaties',
-    //     private array $pattern =  [
-    //         'kik_id' => 'id',
-    //         'slug' => 'slug',
-    //         'title' => 'title.rendered',
-    //         'date' => 'kik_id',
-    //         'vacancy_id' => 'meta.vacature'
-    //     ]
-    // ){}
+    // public function __construct(Importable $model)
+    // {}
 
-    public function execute(string $url, array $pattern)
+    public function execute(Importable $model,string $url, array $pattern)
+    {
+        $oldDataId = $model->all()->pluck('kik_id');
+
+        $newData = $this->getImportingData($url, $pattern)->whereNotIn('kik_id',$oldDataId);
+
+        $this->model->insert($newData->toArray());
+    }
+
+    private function getImportingData(string $url, array $pattern)
     {
         $rawData = Http::get($url)->json();
 

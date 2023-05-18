@@ -1,7 +1,10 @@
 <?php
 
+use App\Actions\ImportAction;
 use App\Http\Controllers\Hr\StatusController;
 use App\Http\Controllers\ProfileController;
+use App\Jobs\Imports\ImportVacancy;
+use App\Models\Vacancy;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -18,31 +21,6 @@ use Inertia\Inertia;
 */
 
 Route::get('/test',function(){
-    //paterns
-    // $pattern = [
-    //     'name' => 'name',
-    //     'kik_id' => 'id',
-    //     'description' => 'description',
-    //     'slug' => 'slug',
-    // ];
-    // $pattern = [
-    //     'kik_id' => 'id',
-    //     'slug' => 'slug',
-    //     'title' => 'title.rendered',
-    //     'kik_date' => 'date',
-    //     'location_id' => 'vacancy-location.0',
-    // ];
-    // $pattern = [
-    //     'kik_id' => 'id',
-    //     'slug' => 'slug',
-    //     'title' => 'title.rendered',
-    //     'kik_date' => 'date',
-    //     'vacancy_id' => 'meta.vacature'
-    // ];
-
-    // $vacancies = $a->execute('http://staging.werkenbijkik.nl/wp-json/wp/v2/solicitaties',$pattern);
-
-    // Application::insert($vacancies);
     return 0;
 });
 Route::get('/', function () {
