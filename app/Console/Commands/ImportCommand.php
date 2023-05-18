@@ -2,7 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\Imports\ImportVacancy;
+use App\Jobs\Imports\ImportJob;
+use App\Models\Application;
+use App\Models\Location;
+use App\Models\Vacancy;
 use Illuminate\Console\Command;
 
 class ImportCommand extends Command
@@ -21,21 +24,56 @@ class ImportCommand extends Command
      */
     protected $description = 'This command is for handling importing three types of models from kik api.';
 
+    //TODO maybe move this somewhere else
+    protected $importData = [
+        'vacancy' => [
+            'model' => '\App\Models\Vacancy',
+            'pattern' => [
+                'kik_id' => 'id',
+                'slug' => 'slug',
+                'title' => 'title.rendered',
+                'kik_date' => 'date',
+                'location_id' => 'vacancy-location.0',
+            ],
+            'url' => 'http://staging.werkenbijkik.nl/wp-json/wp/v2/vacatures',
+        ],
+        'application' => [
+            'model' => '\App\Models\Application',
+            'pattern' => [
+                    'kik_id' => 'id',
+                    'slug' => 'slug',
+                    'title' => 'title.rendered',
+                    'kik_date' => 'date',
+                    'vacancy_id' => 'meta.vacature',
+                    'name' => 'meta.naam',
+                    'phone_number' => 'meta.telefoonnummer',
+                    'email' => 'meta.email',
+                    'kik_application_status' => 'meta.applicant-status'
+            ],
+            'url' => 'http://staging.werkenbijkik.nl/wp-json/wp/v2/solicitaties',
+        ],
+        'location' => [
+            'model' => '\App\Models\Location',
+            'pattern' => [
+                'name' => 'name',
+                'kik_id' => 'id',
+                'description' => 'description',
+                'slug' => 'slug',
+            ],
+            'url' => 'http://staging.werkenbijkik.nl/wp-json/wp/v2/vacancy-location',
+        ],
+    ];
     /**
      * Execute the console command.
      */
-    public function handle(ImportVacancy $importjob)
+    public function handle(ImportJob $importjob)
     {
-        //TODO choose creating three different jobs or one job for all
         $type = $this->choice(
             'What is your type?',
             ['vacancy', 'application', 'location'],
             'location'
         );
-
-        if($type === 'vacancy')
-            $importjob->dispatch();
-
-
+        // $model = '\App\Models\\'.ucfirst($type);
+        $importjob->dispatch($this->importData[$type]['model'], $this->importData[$type]['url'], $this->importData[$type]['pattern']);
     }
 }

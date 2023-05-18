@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Contracts\Importable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Location extends Model
+class Location extends Model implements Importable
 {
     use HasFactory;
 

@@ -1,7 +1,10 @@
 <?php
 
+use App\Actions\ImportAction;
 use App\Http\Controllers\Hr\StatusController;
 use App\Http\Controllers\ProfileController;
+use App\Jobs\Imports\ImportVacancy;
+use App\Models\Vacancy;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -18,6 +21,11 @@ use Inertia\Inertia;
 */
 
 Route::get('/test',function(){
+    $m = 'vacancy';
+    $model = '\App\Models\\'.ucfirst($m);
+    $h = new $model();
+    dd($h->all());
+
     //paterns
     // $pattern = [
     //     'name' => 'name',
