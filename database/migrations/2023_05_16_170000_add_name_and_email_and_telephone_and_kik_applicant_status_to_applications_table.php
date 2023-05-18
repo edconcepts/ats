@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('email')->nullable();
-            $table->string('kik_application_staths')->nullable();
+            $table->string('kik_application_status')->nullable();
         });
     }
 
@@ -28,7 +28,7 @@ return new class extends Migration
             $table->dropColumn('name');
             $table->dropColumn('phone_number');
             $table->dropColumn('email');
-            $table->dropColumn('kik_application_staths');
+            $table->dropColumn('kik_application_status');
         });
     }
 };
