@@ -24,7 +24,7 @@ class StatusResource extends JsonResource
                 'id' => $application->id,
                 'name' => $application->name,
                 'date' => $application->kik_date,
-                'job' => $application->vacancy->title
+                'job' => $application->vacancy?->title
             ];
 
         }

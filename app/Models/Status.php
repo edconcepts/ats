@@ -13,7 +13,7 @@ class Status extends Model
 
 
     // relationships
-    public function emails()
+    public function email()
     {
         return $this->hasOne(StatusEmail::class);
     }

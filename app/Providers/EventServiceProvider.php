@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use App\Events\ApplicationStatusChangedEvent;
+use App\Listeners\SendApplicationStatusChangedMail;
+use App\Listeners\SendApplicationStatusChangedNotification;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -14,10 +16,15 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array<class-string, array<int, class-string>>
      */
+
+    //TODO : make a subscriber for Application changes if other events where added
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        ApplicationStatusChangedEvent::class => [
+            SendApplicationStatusChangedMail::class
+        ]
     ];
 
     /**
