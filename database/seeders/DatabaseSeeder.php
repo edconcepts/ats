@@ -16,8 +16,13 @@ class DatabaseSeeder extends Seeder
             RoleTableSeeder::class,
             UserTableSeeder::class,
             RoleUserTableSeeder::class,
-            StatusSeeder::class
+            StatusTableSeeder::class
         ]);
+
+        \App\Models\Location::factory()->count(3)->create();
+        \App\Models\Vacancy::factory()->count(3)->create();
+        \App\Models\Application::factory()->count(10)->create();
+        \App\Models\StatusEmail::factory()->count(3)->create();
     }
 
 
