@@ -28,6 +28,7 @@ class ImportCommand extends Command
     protected $importData = [
         'vacancy' => [
             'model' => '\App\Models\Vacancy',
+            'job' => '\App\Jobs\Imports\ImportVacancy',
             'pattern' => [
                 'kik_id' => 'id',
                 'slug' => 'slug',
@@ -39,6 +40,7 @@ class ImportCommand extends Command
         ],
         'application' => [
             'model' => '\App\Models\Application',
+            'job' => '\App\Jobs\Imports\ImportApplication',
             'pattern' => [
                     'kik_id' => 'id',
                     'slug' => 'slug',
@@ -54,6 +56,7 @@ class ImportCommand extends Command
         ],
         'location' => [
             'model' => '\App\Models\Location',
+            'job' => '\App\Jobs\Imports\ImportLocation',
             'pattern' => [
                 'name' => 'name',
                 'kik_id' => 'id',
@@ -66,7 +69,7 @@ class ImportCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle(ImportJob $importjob)
+    public function handle()
     {
         $type = $this->choice(
             'What is your type?',
@@ -74,6 +77,10 @@ class ImportCommand extends Command
             'location'
         );
         // $model = '\App\Models\\'.ucfirst($type);
-        $importjob->dispatch($this->importData[$type]['model'], $this->importData[$type]['url'], $this->importData[$type]['pattern']);
+
+        $this->importData[$type]['job']::dispatch(
+            $this->importData[$type]['url'],
+            $this->importData[$type]['pattern']
+        );
     }
 }

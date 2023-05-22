@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Jobs\Imports\ImportJob;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;

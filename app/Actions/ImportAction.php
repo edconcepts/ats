@@ -11,13 +11,13 @@ class ImportAction
     // public function __construct(Importable $model)
     // {}
 
-    public function execute(Importable $model,string $url, array $pattern)
+    public function execute($model, string $url, array $pattern)
     {
         $oldDataId = $model->all()->pluck('kik_id');
 
         $newData = $this->getImportingData($url, $pattern)->whereNotIn('kik_id',$oldDataId);
 
-        $this->model->insert($newData->toArray());
+        $model->insert($newData->toArray());
     }
 
     private function getImportingData(string $url, array $pattern)

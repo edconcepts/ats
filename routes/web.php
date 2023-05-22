@@ -1,10 +1,7 @@
 <?php
 
-use App\Actions\ImportAction;
-use App\Http\Controllers\Hr\StatusController;
+
 use App\Http\Controllers\ProfileController;
-use App\Jobs\Imports\ImportVacancy;
-use App\Models\Vacancy;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
