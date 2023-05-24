@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class);
     }
+
+    public function timeSlots()
+    {
+        return $this->hasMany(StoreManagerTimeSlot::class);
+    }
 }
