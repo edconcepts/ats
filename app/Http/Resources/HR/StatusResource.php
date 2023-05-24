@@ -23,7 +23,7 @@ class StatusResource extends JsonResource
             $candiadates[] = [
                 'id' => $application->id,
                 'name' => $application->name,
-                'date' => $application->kik_date,
+                'date' => $application->kik_date->format('Y-m-d H:i:s'),
                 'job' => $application->vacancy?->title
             ];
 

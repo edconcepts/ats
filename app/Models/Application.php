@@ -12,6 +12,9 @@ class Application extends Model implements Importable
 
     protected $guarded = [];
 
+    protected $casts = [
+        'kik_date' => 'datetime:Y-m-d H:00',
+    ];
 
     //relationships
 

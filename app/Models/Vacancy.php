@@ -10,6 +10,10 @@ class Vacancy extends Model implements Importable
 {
     use HasFactory;
 
+    protected $casts = [
+        'kik_date' => 'datetime:Y-m-d',
+    ];
+
     //relationships
     public function location()
     {

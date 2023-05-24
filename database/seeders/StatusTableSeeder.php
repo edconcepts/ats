@@ -14,14 +14,14 @@ class StatusTableSeeder extends Seeder
     public function run(): void
     {
         DB::table('statuses')->insert([
-            ['name' => 'Gesolliciteerd'],
-            ['name' => 'Afgewezen'],
-            ['name' => 'Gebeld geen contact'],
-            ['name' => '2e keer gebeld geen contact'],
-            ['name' => 'Gesprek ingepland'],
-            ['name' => '2e gesprek ingepland'],
-            ['name' => 'Contract aangeboden'],
-            ['name' => 'Hired'],
+            ['id' => 1, 'name' => 'Gesolliciteerd'],
+            ['id' => 2, 'name' => 'Afgewezen'],
+            ['id' => 3, 'name' => 'Gebeld geen contact'],
+            ['id' => 4, 'name' => '2e keer gebeld geen contact'],
+            ['id' => 5, 'name' => 'Gesprek ingepland'],
+            ['id' => 6, 'name' => '2e gesprek ingepland'],
+            ['id' => 7, 'name' => 'Contract aangeboden'],
+            ['id' => 8, 'name' => 'Hired'],
         ]);
     }
 }
