@@ -16,6 +16,18 @@ class Application extends Model implements Importable
         'kik_date' => 'datetime:Y-m-d H:00',
     ];
 
+    protected static function booted()
+    {
+        static::creating(function(Application $application){
+            $status = Status::where('name',$application->kik_application_status)->first();
+            if($status){
+                $application->status_id = $status->id;
+            }
+
+            // $application->update(['status_id' => 1]);
+
+        });
+    }
     //relationships
 
     public function vacancy()
