@@ -13,13 +13,18 @@ return new class extends Migration
     {
         Schema::create('vacancies', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('kik_id')->unique();
+
+            $table->foreignId('kik_id')
+                ->unique();
+
+            $table->foreignId('location_id')
+                ->references('kik_id')
+                ->on('locations')
+                ->onDelete('cascade');
+
             $table->string('slug');
             $table->string('title')->nullable();
             $table->timestamp('kik_date');
-            $table->foreignId('location_id')->constrained(
-                'locations', 'kik_id'
-            )->cascadeOnDelete();
             $table->timestamps();
         });
     }
