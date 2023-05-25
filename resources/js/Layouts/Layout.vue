@@ -1,4 +1,5 @@
 <template>
+    <Modal />
     <div>
 <TransitionRoot as="template" :show="sidebarOpen">
     <Dialog as="div" class="relative z-50 lg:hidden" @close="sidebarOpen = false">
@@ -94,6 +95,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Link } from '@inertiajs/vue3';
+import { Modal } from "momentum-modal";
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import {
     ArrowLeftOnRectangleIcon,

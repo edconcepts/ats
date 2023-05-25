@@ -15,23 +15,23 @@ class StatusResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $candiadates = [];
+        $candidates = [];
 
         foreach($this->applications as $application)
         {
             //TODO what's the job
-            $candiadates[] = [
+            $candidates[] = [
                 'id' => $application->id,
                 'name' => $application->name,
-                'date' => $application->kik_date->format('Y-m-d H:i:s'),
-                'job' => $application->vacancy?->title
+                'date' => $application->kik_date->format('d-m-Y'),
+                'job' => $application->vacancy?->title,
             ];
 
         }
         return [
             'name' => $this->name,
             'id' => $this->id,
-            'candidates' => $candiadates
+            'candidates' => $candidates,
         ];
     }
 }

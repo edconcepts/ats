@@ -8,11 +8,17 @@ use App\Http\Controllers\HR\StatusController;
 use Inertia\Inertia;
 
 
+//Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+Route::get('/dashboard/application/{application}', [DashboardController::class, 'show_application'])->name('dashboard.application.show');
+
 // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+
 
 Route::resource('/statuses', StatusController::class)->only([
     'index', 'store' , 'create'
 ]);
 Route::put('/applications/{application}/status', [ApplicationStatusController::class, 'update'])->name('applications.status.update');
-Route::get('/locations' , [LocationController::class, 'index'])->name('locations.index');
+
+Route::resource('/locations' , LocationController::class)
+    ->only(['index', 'edit', 'update']);
 
