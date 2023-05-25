@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'location_id',
     ];
 
     /**
@@ -44,10 +45,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $appends =[
-        'is_hr', 'is_store_manager'
-    ];
-
     // relationships
 
     public function roles()
@@ -65,17 +62,21 @@ class User extends Authenticatable
         return $this->hasOne(Location::class);
     }
 
-
-    // accessors
-    public function getIsHrAttribute(): bool
+    protected function isHR(): Attribute
     {
-        $isHr = $this->whereRelation('roles','name', 'hr')->count();
-        return $isHr;
+        return Attribute::make(
+            get: function () {
+                return $this->role == 'hr';
+            }
+        );
     }
 
-    public function getIsStoreManagerAttribute(): bool
+    protected function isStoreManager(): Attribute
     {
-        $isStoreManager = $this->whereRelation('roles','name', 'store_manager')->count();
-        return $isStoreManager;
+        return Attribute::make(
+            get: function () {
+                return $this->role == 'store_manager';
+            }
+        );
     }
 }

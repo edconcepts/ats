@@ -28,6 +28,6 @@ class Location extends Model implements Importable
 
     public function manager(): HasOne
     {
-        return $this->hasOne(User::class, 'id', 'user_id');
+        return $this->hasOne(User::class);
     }
 }
