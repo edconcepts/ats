@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Contracts\Importable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Location extends Model implements Importable
 {
@@ -20,5 +21,10 @@ class Location extends Model implements Importable
     public function applications()
     {
         return $this->throughVacancies()->hasApplications();
+    }
+
+    public function manager()
+    {
+        return $this->belongsTo(User::class);
     }
 }

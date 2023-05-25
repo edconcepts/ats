@@ -18,4 +18,12 @@ class DashboardController extends Controller
             'statuses' =>  StatusResource::collection($statuses)
         ]);
     }
+
+    public function show_application(Application $application)
+    {
+        return Inertia::modal('HR/Application', [
+            'application' => $application->load('vacancy.location.manager.timeSlots', 'status'),
+            'statuses' =>  Status::all(),
+        ])->baseRoute('hr.dashboard.index');
+    }
 }

@@ -11,21 +11,6 @@ import autoAnimate from "@formkit/auto-animate";
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 
-
-// const statuses = ref([
-    // { name: 'Gesolliciteerd', candidates: [
-    //     { id: 1, name: 'John Doe', date: '09-05-2023', job: 'Bijbaan vacature', },
-    //     { id: 2, name: 'Arko Elsenaar', date: '09-05-2023', job: 'Bijbaan vacature', },
-    //     { id: 3, name: 'Enrico Duinkerken', date: '09-05-2023', job: 'Bijbaan vacature', },
-    // ] },
-//     { name: 'Afgewezen', candidates: [] },
-//     { name: 'Gebeld geen contact', candidates: [], },
-//     { name: '2e keer gebeld geen contact', candidates: [], },
-//     { name: 'Gesprek ingepland', candidates: [], },
-//     { name: '2e gesprek ingepland', candidates: [], },
-//     { name: 'Contract aangeboden', candidates: [], },
-//     { name: 'Hired', candidates: [], },
-// ]);
 const props = defineProps({
     statuses : Object
 });
@@ -73,6 +58,10 @@ const updateApplicationStatus = (application,status) => {
         status: status
     });
 };
+
+const showApplication = (application) => {
+    router.visit(route('hr.dashboard.application.show',application));
+};
 </script>
 
 <template>
@@ -113,7 +102,7 @@ const updateApplicationStatus = (application,status) => {
                     ref="parent"
                 >
                     <template #item="{ element, index }">
-                        <div class="p-4 border-b last-of-type:border-0"
+                        <div @click="showApplication(element)" class="p-4 border-b last-of-type:border-0"
                             :class="element"
                         >
                             <div class="flex justify-between items-center">
