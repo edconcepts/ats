@@ -24,6 +24,6 @@ class DashboardController extends Controller
         return Inertia::modal('HR/Application', [
             'application' => $application->load('vacancy.location.manager.timeSlots', 'status'),
             'statuses' =>  Status::all(),
-        ])->baseRoute('hr.dashboard.index');
+        ])->baseRoute('dashboard');
     }
 }
