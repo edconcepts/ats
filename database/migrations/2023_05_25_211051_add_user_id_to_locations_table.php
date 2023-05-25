@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('applications', function (Blueprint $table) {
-            $table->foreignId('status_id')->nullable()->constrained()->onDelete('set null');
+        Schema::table('locations', function (Blueprint $table) {
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete();
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('applications', function (Blueprint $table) {
-            $table->dropColumn('status_id');
+        Schema::table('locations', function (Blueprint $table) {
+            $table->dropColumn('user_id');
         });
     }
 };

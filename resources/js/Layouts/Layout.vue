@@ -56,7 +56,10 @@
                 <li>
                     <ul role="list" class="-mx-2 space-y-1">
                         <li v-for="item in navigation" :key="item.name">
-                            <Link :href="item.href" :class="[item.current ? 'bg-gray-50 text-red-600' : 'text-gray-700 hover:text-red-600 hover:bg-gray-50', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
+                            <Link
+                                :href="item.href"
+                                :class="[item.current ? 'bg-gray-50 text-red-600' : 'text-gray-700 hover:text-red-600 hover:bg-gray-50', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']"
+                                :method="item.method ? item.method : 'get'">
                                 <component :is="item.icon" :class="[item.current ? 'text-red-600' : 'text-gray-400 group-hover:text-red-600', 'h-6 w-6 shrink-0']" aria-hidden="true" />
                                 {{ item.name }}
                             </Link>
@@ -109,10 +112,10 @@ import {
 } from '@heroicons/vue/24/outline'
 
 const navigation = [
-    { name: 'Dashboard', href: route('hr.dashboard.index'), icon: HomeIcon, current: route().current('hr.dashboard.index') },
-    { name: 'Locaties', href: route('hr.locations.index'), icon: MapPinIcon, current: route().current('hr.locations.index') },
-    { name: 'Statussen', href: route('hr.statuses.index'), icon: TagIcon, current: route().current('hr.statuses*') },
-    { name: 'Uitloggen', href: '#', icon: ArrowLeftOnRectangleIcon, current: false },
+    { name: 'Dashboard', href: route('dashboard'), icon: HomeIcon, current: route().current('hr.dashboard.index'), method:false },
+    { name: 'Locaties', href: route('hr.locations.index'), icon: MapPinIcon, current: route().current('hr.locations.index'), method:false },
+    { name: 'Statussen', href: route('hr.statuses.index'), icon: TagIcon, current: route().current('hr.statuses*'), method:false },
+    { name: 'Uitloggen', href: route('logout'), icon: ArrowLeftOnRectangleIcon, current: false, method: 'post' },
 ]
 
 const sidebarOpen = ref(false)
