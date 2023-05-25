@@ -32,6 +32,7 @@ class LocationController extends Controller
         $values = [
             'email' => $request->input('email'),
             'name' => $request->input('name'),
+            'role' => 'store_manager',
         ];
 
         if ($request->input('password')) {
