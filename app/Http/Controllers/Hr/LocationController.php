@@ -30,6 +30,7 @@ class LocationController extends Controller
     public function update(UpdateStoreManagerRequest $request, Location $location)
     {
         $values = [
+            'email' => $request->input('email'),
             'name' => $request->input('name'),
         ];
 
@@ -41,7 +42,7 @@ class LocationController extends Controller
             ->manager()
             ->updateOrCreate(
                 [
-                    'email' => $request->input('email'),
+                    'location_id' => $location->id,
                 ],
                 $values,
             );
@@ -51,9 +52,6 @@ class LocationController extends Controller
             ->first();
 
         $user->roles()->sync($storeManagerRole);
-
-        $location->user_id = $user->id;
-        $location->save();
 
         return redirect()->route('hr.locations.index');
     }
