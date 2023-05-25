@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(StoreManagerTimeSlot::class);
     }
+
+    public function location()
+    {
+        return $this->hasOne(User::class);
+    }
 }
