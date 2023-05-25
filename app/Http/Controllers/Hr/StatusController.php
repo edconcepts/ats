@@ -27,13 +27,13 @@ class StatusController extends Controller
         $status = Status::create(['name'=> $request->name]);
 
         if($request->email['subject']){
-            $status->emails()->create([
+            $status->email()->create([
                 'subject' => $request->email['subject'],
                 'body' => $request->email['body']
             ]);
         }
 
-        return redirect(route('hr.statuses'));
+        return redirect(route('hr.statuses.index'));
     }
 
 }
