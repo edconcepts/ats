@@ -8,7 +8,7 @@ use App\Http\Controllers\HR\StatusController;
 use Inertia\Inertia;
 
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+// Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
 Route::resource('/statuses', StatusController::class)->only([
     'index', 'store' , 'create'

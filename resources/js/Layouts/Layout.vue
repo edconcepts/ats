@@ -110,7 +110,7 @@ import {
 } from '@heroicons/vue/24/outline'
 
 const navigation = [
-    { name: 'Dashboard', href: route('hr.dashboard.index'), icon: HomeIcon, current: route().current('hr.dashboard.index'), method:false },
+    { name: 'Dashboard', href: route('dashboard'), icon: HomeIcon, current: route().current('hr.dashboard.index'), method:false },
     { name: 'Locaties', href: route('hr.locations.index'), icon: MapPinIcon, current: route().current('hr.locations.index'), method:false },
     { name: 'Statussen', href: route('hr.statuses.index'), icon: TagIcon, current: route().current('hr.statuses*'), method:false },
     { name: 'Uitloggen', href: route('logout'), icon: ArrowLeftOnRectangleIcon, current: false, method: 'post' },
