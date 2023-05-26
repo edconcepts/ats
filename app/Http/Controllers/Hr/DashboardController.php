@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\HR\StatusResource;
 use App\Models\Application;
 use App\Models\Status;
+use App\Models\StoreManagerTimeSlot;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

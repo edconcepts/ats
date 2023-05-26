@@ -10,6 +10,8 @@ class Interview extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     //relationships
     public function storeManagerTimeSlot()
     {

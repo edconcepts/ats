@@ -14,7 +14,7 @@ class DashboardController extends Controller
         if(auth()->user()->isHR) {
             $statuses = Status::with('applications', 'applications.vacancy')->get();
             return Inertia::render('HR/Dashboard', [
-                'statuses' => StatusResource::collection($statuses)
+                'statuses' => StatusResource::collection($statuses),
             ]);
         }
         elseif (auth()->user()->isStoreManager) {
