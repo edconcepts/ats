@@ -21,8 +21,10 @@ class StoreInterviewRequest extends FormRequest
      */
     public function rules(): array
     {
+        //TODO timeSlot need a rule that it should attach to application vacancy location owner
         return [
-            //
+            'application_id' => ['required', 'exists:applications,id'] ,
+            'timeSlot' => ['required', 'exists:timeSlots,id']
         ];
     }
 }
