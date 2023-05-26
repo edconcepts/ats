@@ -11,9 +11,13 @@ class InterviewController extends Controller
 {
     public function store(StoreInterviewRequest $request)
     {
-        Interview::create([
-            'application_id' => $request->application,
-            'store_manager_time_slot_id' => $request->time_slot,
+        Interview::UpdateOrCreate([
+            [
+                'application_id' => $request->application,
+            ],
+            [
+                'store_manager_time_slot_id' => $request->timeSlot,
+            ]
         ]);
 
         return redirect(route('dashboard'));

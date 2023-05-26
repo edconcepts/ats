@@ -18,7 +18,7 @@ Route::resource('/statuses', StatusController::class)->only([
     'index', 'store' , 'create'
 ]);
 Route::put('/applications/{application}/status', [ApplicationStatusController::class, 'update'])->name('applications.status.update');
-
+Route::post('/interviews', [InterviewController::class, 'store'])->name('interviews.store');
 Route::resource('/locations' , LocationController::class)
     ->only(['index', 'edit', 'update']);
 

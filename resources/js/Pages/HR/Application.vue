@@ -21,7 +21,10 @@ const changeStatus = (application, status) => {
 }
 
 const saveTimeSlot = (application, timeSlot) => {
-    // TODO: implement
+    statusForm.post(route('hr.interviews.store', application), {
+        application: application,
+        timeSlot : timeSlot
+    })
     close()
 }
 
@@ -130,11 +133,11 @@ const archive = (application) => {
                                                 <select
                                                     class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                     v-model="application.status_id" >
-                                                    <option v-for="timeslot in application.vacancy.location.manager?.timeSlots" >
-                                                        test
+                                                    <option v-for="timeSlot in application.vacancy.location.manager?.timeSlots" :value="timeSlot.id" >
+                                                        {{ timeSlot.from_date_time }}
                                                     </option>
                                                 </select>
-                                                <button type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto" @click="saveTimeSlot">Inplannen</button>
+                                                <button type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto" @click="saveTimeSlot(application,timeSlot)">Inplannen</button>
                                             </div>
 
 
