@@ -10,8 +10,6 @@ class UpdateStoreManagerRequest extends FormRequest
 {
     public function rules(): array
     {
-        ray($this->route('location'));
-
         $user = User::query()
             ->where('location_id', $this->route('location')->id)
             ->first();
