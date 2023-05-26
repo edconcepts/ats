@@ -15,10 +15,12 @@ class UserTableSeeder extends Seeder
         \App\Models\User::factory()->create([
             'name' => 'Test Hr User',
             'email' => 'hr@example.com',
+            'role' => 'hr'
         ]);
         \App\Models\User::factory()->create([
             'name' => 'Test Store Manager User',
             'email' => 'storemanager@example.com',
+            'role' => 'store_manager'
         ]);
 
     }

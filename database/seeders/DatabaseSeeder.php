@@ -13,16 +13,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            RoleTableSeeder::class,
-            UserTableSeeder::class,
-            RoleUserTableSeeder::class,
-            StatusTableSeeder::class
+            StoreManagerTimeSlotTableSeeder::class,
         ]);
-
-        \App\Models\Location::factory()->count(3)->create();
-        \App\Models\Vacancy::factory()->count(3)->create();
-        \App\Models\Application::factory()->count(10)->create();
-        \App\Models\StatusEmail::factory()->count(3)->create();
     }
 
 

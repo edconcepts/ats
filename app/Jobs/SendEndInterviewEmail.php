@@ -37,6 +37,7 @@ class SendEndInterviewEmail implements ShouldQueue
         foreach($interviews as $interview)
         {
             $interview->storeManagerTimeSlot->storeManager->notify(new InterviewEnded($interview->application, $possibleStatuses));
+            $interview->update(['end_email_sent' => 1]);
         }
     }
 }
