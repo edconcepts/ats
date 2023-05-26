@@ -13,6 +13,12 @@ class UserTableSeeder extends Seeder
     public function run(): void
     {
         \App\Models\User::factory()->create([
+            'name' => 'HR gebruiker',
+            'email' => 'hr@werkenbijkik.nl',
+            'role' => 'hr'
+        ]);
+
+        \App\Models\User::factory()->create([
             'name' => 'Test Hr User',
             'email' => 'hr@example.com',
             'role' => 'hr'
