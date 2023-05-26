@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\HR;
+namespace App\Http\Controllers\HumanResources;
 
 use App\Events\ApplicationStatusChangedEvent;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\HR\UpdateApplicationStatusRequest;
+use App\Http\Requests\HumanResources\UpdateApplicationStatusRequest;
 use App\Models\Application;
 use Illuminate\Http\Request;
 

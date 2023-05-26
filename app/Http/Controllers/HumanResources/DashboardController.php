@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\HR;
+namespace App\Http\Controllers\HumanResources;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\HR\StatusResource;

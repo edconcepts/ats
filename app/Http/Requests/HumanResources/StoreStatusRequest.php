@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests\HR;
+namespace App\Http\Requests\HumanResources;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreInterviewRequest extends FormRequest
+class StoreStatusRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,10 +21,11 @@ class StoreInterviewRequest extends FormRequest
      */
     public function rules(): array
     {
-        //TODO timeSlot need a rule that it should attach to application vacancy location owner
+        //TODO change the messages
         return [
-            'application_id' => ['required', 'exists:applications,id'] ,
-            'timeSlot' => ['required', 'exists:timeSlots,id']
+            'name' => ['required', 'max:120'],
+            'email.subject' => ['required_with:email.body', 'max:120'],
+            'email.body' => ['required_with:email.subject', 'max:500'],
         ];
     }
 }

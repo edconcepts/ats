@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\HR\ApplicationStatusController;
-use App\Http\Controllers\HR\DashboardController;
-use App\Http\Controllers\HR\LocationController;
+use App\Http\Controllers\HumanResources\ApplicationStatusController;
+use App\Http\Controllers\HumanResources\DashboardController;
+use App\Http\Controllers\HumanResources\LocationController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\HR\StatusController;
+use App\Http\Controllers\HumanResources\StatusController;
 use Inertia\Inertia;
 
 

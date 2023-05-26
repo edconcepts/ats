@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\HR;
+namespace App\Http\Controllers\HumanResources;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\HR\StoreInterviewRequest;
+use App\Http\Requests\HumanResources\StoreInterviewRequest;
 use App\Models\Interview;
 use Illuminate\Http\Request;
 

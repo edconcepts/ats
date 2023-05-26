@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\HR;
+namespace App\Http\Controllers\HumanResources;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\HR\StoreStatusRequest;
+use App\Http\Requests\HumanResources\StoreStatusRequest;
 use App\Models\Status;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
