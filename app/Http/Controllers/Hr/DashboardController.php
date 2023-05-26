@@ -22,8 +22,10 @@ class DashboardController extends Controller
 
     public function show_application(Application $application)
     {
+        $application->load('vacancy.location.manager.timeSlots', 'status');
+
         return Inertia::modal('HR/Application', [
-            'application' => $application->load('vacancy.location.manager.timeSlots', 'status'),
+            'application' => $application,
             'statuses' =>  Status::all(),
         ])->baseRoute('dashboard');
     }

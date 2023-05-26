@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StoreManager\ApplicationStatusController;
+use App\Http\Controllers\StoreManager\TimeSlotController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,6 +38,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::post('/timeslots/store', TimeSlotController::class)
+    ->name('store-manager.timeslot');
 
 Route::get('/applications/{application}/statuses/{status}', [ApplicationStatusController::class, 'update'])->name('store-manager.application-status.update');
 require __DIR__.'/auth.php';

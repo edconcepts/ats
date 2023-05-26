@@ -48,12 +48,6 @@ class LocationController extends Controller
                 $values,
             );
 
-        $storeManagerRole = Role::query()
-            ->where('name','store_manager')
-            ->first();
-
-        $user->roles()->sync($storeManagerRole);
-
         return redirect()->route('hr.locations.index');
     }
 }

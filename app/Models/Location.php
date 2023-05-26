@@ -26,8 +26,8 @@ class Location extends Model implements Importable
         return $this->throughVacancies()->hasApplications();
     }
 
-    public function manager(): BelongsTo
+    public function manager(): HasOne
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->hasOne(User::class);
     }
 }
