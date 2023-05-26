@@ -7,6 +7,32 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
+        Schema::table('locations', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
+        });
+
+        Schema::table('users', function (Blueprint $table) {
+            $table->foreignId('location_id')->nullable()->constrained();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::table('', function (Blueprint $table) {
+            //
+        });
+    }
+};
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    public function up(): void
+    {
 <<<<<<<< HEAD:database/migrations/2023_05_25_223016_add_end_email_sent_to_interviews_table.php
         Schema::table('interviews', function (Blueprint $table) {
             $table->boolean('end_email_sent')->default(0);
