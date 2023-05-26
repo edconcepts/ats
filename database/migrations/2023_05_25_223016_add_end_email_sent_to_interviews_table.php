@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('interviews', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('store_manager_time_slot_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('application_id')->constrained()->cascadeOnDelete();
-            $table->timestamps();
+        Schema::table('interviews', function (Blueprint $table) {
+            $table->boolean('end_email_sent')->default(0);
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('interviews');
+        Schema::table('interviews', function (Blueprint $table) {
+            $table->dropColumn('end_email_sent');
+        });
     }
 };

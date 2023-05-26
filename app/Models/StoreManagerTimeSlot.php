@@ -13,6 +13,6 @@ class StoreManagerTimeSlot extends Model
     // relationships
     public function storeManager()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
