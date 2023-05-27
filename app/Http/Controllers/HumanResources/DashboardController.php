@@ -15,7 +15,10 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $statuses = Status::with('applications', 'applications.vacancy')->get();
+        $statuses = Status::query()
+            ->with('applications', 'applications.vacancy')
+            ->get();
+        dd($statuses);
         return Inertia::render('HR/Dashboard', [
             'statuses' =>  StatusResource::collection($statuses)
         ]);

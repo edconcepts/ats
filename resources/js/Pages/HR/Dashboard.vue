@@ -4,10 +4,10 @@ import { Head, router } from '@inertiajs/vue3';
 
 import { MagnifyingGlassIcon, ArchiveBoxArrowDownIcon } from "@heroicons/vue/24/outline";
 import draggable from "vuedraggable/src/vuedraggable";
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {useAutoAnimate} from "@formkit/auto-animate/vue";
 import autoAnimate from "@formkit/auto-animate";
-
+import debounce from 'lodash/debounce';
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 
@@ -62,6 +62,15 @@ const updateApplicationStatus = (application,status) => {
 const showApplication = (application) => {
     router.visit(route('hr.dashboard.application.show',application));
 };
+
+let search = ref('');
+watch(search, debounce(function(value){
+  router.get(
+    route('dashboard'),
+    { search: value },
+    { preserveState: true, replace: true }
+  )
+},300));
 </script>
 
 <template>
@@ -83,6 +92,7 @@ const showApplication = (application) => {
                         placeholder="Zoeken door alle vacatures"
                         type="search"
                         name="search"
+                        v-model="search"
                     />
                 </form>
             </div>
