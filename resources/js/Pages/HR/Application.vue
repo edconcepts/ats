@@ -33,7 +33,7 @@ const saveTimeSlot = (application, timeSlot) => {
 }
 
 const archive = (application) => {
-    // TODO: implement
+    router.put(route('hr.applications.archive.update',application));
     close()
 }
 </script>

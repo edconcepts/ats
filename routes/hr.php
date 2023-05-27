@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HumanResources\ApplicationArchiveController;
 use App\Http\Controllers\HumanResources\ApplicationInterviewController;
 use App\Http\Controllers\HumanResources\ApplicationStatusController;
 use App\Http\Controllers\HumanResources\DashboardController;
@@ -20,6 +21,8 @@ Route::resource('/statuses', StatusController::class)->only([
 ]);
 Route::put('/applications/{application}/status', [ApplicationStatusController::class, 'update'])->name('applications.status.update');
 Route::post('/applications/{application}/interviews', [ApplicationInterviewController::class, 'store'])->name('applications.interviews.store');
+Route::put('/applications/{application}/archive', [ApplicationArchiveController::class, 'update'])->name('applications.archive.update');
+
 Route::resource('/locations' , LocationController::class)
     ->only(['index', 'edit', 'update']);
 

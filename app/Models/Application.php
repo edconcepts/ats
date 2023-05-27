@@ -5,10 +5,11 @@ namespace App\Models;
 use App\Contracts\Importable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use \LaravelArchivable\Archivable;
 
 class Application extends Model implements Importable
 {
-    use HasFactory;
+    use HasFactory, Archivable;
 
     protected $guarded = [];
 
