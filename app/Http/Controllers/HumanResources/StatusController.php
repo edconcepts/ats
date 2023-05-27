@@ -54,6 +54,7 @@ class StatusController extends Controller
                 ]
             );
         }else{
+            //TODO: this
             $status->email()?->delete();
         }
         return redirect(route('hr.statuses.index'));

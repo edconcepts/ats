@@ -71,11 +71,7 @@ class ImportCommand extends Command
      */
     public function handle()
     {
-        $type = $this->choice(
-            'What is your type?',
-            ['vacancy', 'application', 'location'],
-            'location'
-        );
+        $type = $this->argument('type');
         // $model = '\App\Models\\'.ucfirst($type);
 
         $this->importData[$type]['job']::dispatch(
