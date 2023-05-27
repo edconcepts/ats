@@ -10,7 +10,6 @@ return new class extends Migration {
         Schema::table('store_manager_time_slots', function (Blueprint $table) {
             $table->dropColumn('to_date_time');
             $table->dropColumn('from_date_time');
-
             $table->dateTime('start');
         });
     }
@@ -18,7 +17,9 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('', function (Blueprint $table) {
-            //
+            $table->dropColumn('start');
+            $table->dateTime('from_date_time');
+            $table->dateTime('to_date_time');
         });
     }
 };

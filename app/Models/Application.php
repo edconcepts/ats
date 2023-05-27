@@ -39,4 +39,9 @@ class Application extends Model implements Importable
     {
         return $this->belongsTo(Status::class);
     }
+
+    public function interview()
+    {
+        return $this->hasOne(interview::class);
+    }
 }

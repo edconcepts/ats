@@ -26,7 +26,7 @@ class Interview extends Model
     public function scopeEnded(Builder $query)
     {
         $query->whereHas('StoreManagerTimeSlot', function($query){
-            return $query->where('to_date_time' , '<' , now());
+            return $query->where('start' , '<' , now()->subHour());
         });
     }
 }

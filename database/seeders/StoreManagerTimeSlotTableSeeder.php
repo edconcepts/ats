@@ -16,29 +16,24 @@ class StoreManagerTimeSlotTableSeeder extends Seeder
         DB::table('store_manager_time_slots')->insert([
             [
                 'user_id' => '2',
-                'from_date_time' => now()->subDay(),
-                'to_date_time' => now()
+                'start' => now()->subDay(),
             ],
             [
                 'user_id' => '2',
-                'from_date_time' => now()->subDay(),
-                'to_date_time' => now()->subDay()
+                'start' => now()->subDay(),
             ]
             ,
             [
                 'user_id' => '2',
-                'from_date_time' => now()->subDay(),
-                'to_date_time' => now()->addDay()
+                'start' => now()->subDay(),
             ],
             [
                 'user_id' => '2',
-                'from_date_time' => now()->subDay(),
-                'to_date_time' => now()->subDay()
+                'start' => now()->subDay(),
             ],
             [
                 'user_id' => '2',
-                'from_date_time' => now()->subDay(),
-                'to_date_time' => now()->addDay()
+                'start' => now()->subDay(),
             ]
         ]);
     }
