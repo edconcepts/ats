@@ -3,6 +3,7 @@
 namespace App\Http\Requests\HumanResources;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreApplicationInterviewRequest extends FormRequest
 {
@@ -21,9 +22,10 @@ class StoreApplicationInterviewRequest extends FormRequest
      */
     public function rules(): array
     {
-        // TODO timeSlot need a rule that it should attach to application vacancy location owner
         return [
-            'timeSlot' => ['required', 'exists:store_manager_time_slots,id']
+            'timeSlot' => ['required', 'exists:store_manager_time_slots,id', Rule::in(
+                $this->application->vacancy->location->manager->timeslots()->pluck('id')->toArray()
+            )]
         ];
     }
 }

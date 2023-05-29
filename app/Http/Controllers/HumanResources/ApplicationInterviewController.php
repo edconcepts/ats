@@ -20,7 +20,6 @@ class ApplicationInterviewController extends Controller
                 'store_manager_time_slot_id' => $request->timeSlot,
             ]
         );
-        return $request->timeSlot;
         return redirect(route('dashboard'));
     }
 }
