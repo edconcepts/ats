@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('applications', function(Blueprint $table)
         {
-            $table->dropForeign('status_id');
+            $table->dropForeign('applications_status_id_foreign');
             $table->dropColumn('status_id');
         });
 
