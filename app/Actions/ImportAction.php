@@ -2,9 +2,6 @@
 
 namespace App\Actions;
 
-use App\Contracts\Importable;
-use App\Models\Application;
-use App\Models\Status;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 
@@ -36,13 +33,6 @@ class ImportAction
             {
                 $data[$key] = Arr::get($application, $value);
             }
-
-            //TODO refactor this
-            if($model instanceof Application)
-            {
-                $data['status_id'] = Status::where('name', $data['kik_application_status'])->firstOrFail()->id;
-            }
-
             $extractedData->push($data);
         }
         return $extractedData;
