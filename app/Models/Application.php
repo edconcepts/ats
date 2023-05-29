@@ -5,10 +5,11 @@ namespace App\Models;
 use App\Contracts\Importable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use \LaravelArchivable\Archivable;
 
 class Application extends Model implements Importable
 {
-    use HasFactory;
+    use HasFactory, Archivable;
 
     protected $guarded = [];
 
@@ -38,5 +39,10 @@ class Application extends Model implements Importable
     public function status()
     {
         return $this->belongsTo(Status::class);
+    }
+
+    public function interview()
+    {
+        return $this->hasOne(interview::class);
     }
 }

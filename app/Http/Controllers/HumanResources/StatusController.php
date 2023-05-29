@@ -36,4 +36,28 @@ class StatusController extends Controller
         return redirect(route('hr.statuses.index'));
     }
 
+    public function edit(Status $status)
+    {
+        return Inertia::render('HR/Statuses/Edit', ['status' => $status->load('email')]);
+    }
+
+    public function update(Status $status, StoreStatusRequest $request)
+    {
+        $status->update(['name' => $request->name]);
+
+        if($request->email['subject']){
+            $status->email()->updateOrCreate(
+                ['status_id' => $status->id],
+                [
+                    'subject' => $request->email['subject'],
+                    'body' => $request->email['body']
+                ]
+            );
+        }else{
+            //TODO: this
+            $status->email()?->delete();
+        }
+        return redirect(route('hr.statuses.index'));
+
+    }
 }

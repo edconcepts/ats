@@ -11,7 +11,12 @@ const { show, close, redirect } = useModal()
 
 const statusForm = useForm({
     status: null,
-})
+});
+const timeSlotForm = useForm({
+    timeSlot: null,
+});
+
+
 
 const changeStatus = (application, status) => {
     statusForm.put(route('hr.applications.status.update', application), {
@@ -21,15 +26,14 @@ const changeStatus = (application, status) => {
 }
 
 const saveTimeSlot = (application, timeSlot) => {
-    statusForm.post(route('hr.interviews.store', application), {
-        application: application,
+    timeSlotForm.post(route('hr.applications.interviews.store', application), {
         timeSlot : timeSlot
     })
     close()
 }
 
 const archive = (application) => {
-    // TODO: implement
+    router.put(route('hr.applications.archive.update',application));
     close()
 }
 </script>
@@ -125,7 +129,12 @@ const archive = (application) => {
                                                         {{ status.name }}
                                                     </option>
                                                 </select>
-                                                <button type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto" @click="changeStatus(application)">Wijzigen</button>
+                                                <button
+                                                    type="button"
+                                                    class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto"
+                                                    @click="changeStatus(application)">
+                                                    Wijzigen
+                                                </button>
                                             </div>
 
                                             <div class="flex flex-col gap-2 mt-4 pt-4 border-t">
@@ -133,12 +142,19 @@ const archive = (application) => {
 
                                                 <select
                                                     class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                    v-model="application.status_id" >
-                                                    <option v-for="timeSlot in application.vacancy.location.manager?.time_slots" :value="timeSlot.id" >
+                                                    v-model="timeSlotForm.timeSlot" >
+                                                    <option
+                                                        v-for="timeSlot in application.vacancy.location.manager?.time_slots"
+                                                        :value="timeSlot.id">
                                                         {{ timeSlot.start }}
                                                     </option>
                                                 </select>
-                                                <button type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto" @click="saveTimeSlot(application,timeSlot)">Inplannen</button>
+                                                <button
+                                                    type="button"
+                                                    class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto"
+                                                    @click="saveTimeSlot(application)">
+                                                    Inplannen
+                                                </button>
                                             </div>
 
 
