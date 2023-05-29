@@ -1,13 +1,14 @@
 <script setup>
 import Layout from '@/Layouts/Layout.vue';
-import { Head, router } from '@inertiajs/vue3';
+import {Head, Link, router} from '@inertiajs/vue3';
 defineProps({
     days: Array,
     week: Number
 })
-import { MagnifyingGlassIcon, ArchiveBoxArrowDownIcon } from "@heroicons/vue/24/outline";
+import {MagnifyingGlassIcon, ArchiveBoxArrowDownIcon, ArrowLeftOnRectangleIcon} from "@heroicons/vue/24/outline";
 import draggable from "vuedraggable/src/vuedraggable";
 import {onMounted, ref} from "vue";
+import StoreManagerLayout from "@/Layouts/StoreManagerLayout.vue";
 
 const saveTimeSlot = (timeslot) => {
     router.post(route('store-manager.timeslot'), {
@@ -24,21 +25,32 @@ const openWeek = (week) => {
 <template>
     <Head title="Dashboard" />
 
-    <Layout>
+    <StoreManagerLayout>
+                <div class="flex justify-between  items-center ">
+                    <div>
+                        <h1 class="font-semibold text-2xl flex items-center gap-8">
+                            Agenda
+                        </h1>
+                        <p>Vink de tijdsvakken aan waarin je beschikbaar bent om sollicitatiegesprekken te voeren.</p>
 
-                <h1 class="font-semibold text-2xl">Agenda</h1>
-                <p>Vink de tijdsvakken aan waarin je beschikbaar bent om sollicitatiegesprekken te voeren.</p>
+                    </div>
+                    <div class="shrink-0 flex gap-4 justify-end">
+
+                        <img class="h-24 w-auto" src="http://staging.werkenbijkik.nl/wp-content/uploads/2023/03/KiK_Logo_3D_4c.svg" alt="Your Company" />
+
+                    </div>
+                </div>
 
                 <div class="flex justify-between mt-8">
                     <button @click="openWeek(week - 1)" type="button" class="flex  gap-1.5  items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="-ml-0.5 h-5 w-5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
                         </svg>
-                        Week 12
+                        Week {{ week - 1 }}
                     </button>
                     <h1 class="font-bold text-2xl">Week {{ week }}</h1>
                     <button @click="openWeek(parseInt(week) + 1)" type="button" class="flex  gap-1.5  items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                        Week 13
+                        Week {{ parseInt(week) + 1 }}
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="-ml-0.5 h-5 w-5">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
                         </svg>
@@ -52,5 +64,9 @@ const openWeek = (week) => {
                         </label>
                     </div>
                 </div>
-    </Layout>
+
+        <div class="flex justify-end">
+
+        </div>
+    </StoreManagerLayout>
 </template>
