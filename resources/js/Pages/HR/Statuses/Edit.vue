@@ -11,6 +11,7 @@ const props = defineProps({
 
 const form = useForm({
     name: props.status.name,
+    hasEmail: props.status.email ? true : false,
     email: {
         subject: props.status.email?.subject,
         body: props.status.email?.body,
@@ -23,7 +24,7 @@ const shortcodes = [
     'locatie',
 ];
 
-const hasEmail = ref(props.status.email?.subject ? true : false);
+const hasEmail = ref(props.status.email ? true : false);
 
 const updateStatus = (status) => {
     form.put(route('hr.statuses.update',status));
@@ -69,8 +70,8 @@ const insertIntoBody = (event) => {
 
                                     <div class="col-span-full">
                                     <SwitchGroup as="div" class="flex items-center">
-                                        <Switch v-model="hasEmail" :class="[hasEmail ? 'bg-red-600' : 'bg-gray-200', 'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2']">
-                                            <span aria-hidden="true" :class="[hasEmail ? 'translate-x-5' : 'translate-x-0', 'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out']" />
+                                        <Switch v-model="form.hasEmail" :class="[form.hasEmail ? 'bg-red-600' : 'bg-gray-200', 'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2']">
+                                            <span aria-hidden="true" :class="[form.hasEmail ? 'translate-x-5' : 'translate-x-0', 'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out']" />
                                         </Switch>
                                         <SwitchLabel as="span" class="ml-3 text-sm">
                                             <span class="font-medium text-gray-900">E-mail versturen bij status wijziging</span>
@@ -78,7 +79,7 @@ const insertIntoBody = (event) => {
                                     </SwitchGroup>
                                     </div>
 
-                                    <template v-if="hasEmail">
+                                    <template v-if="form.hasEmail">
                                         <div class="sm:col-span-4">
                                             <label for="email_subject" class="block text-sm font-medium leading-6 text-gray-900">Onderwerp</label>
                                             <div class="mt-2">

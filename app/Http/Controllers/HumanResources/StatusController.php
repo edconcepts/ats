@@ -26,7 +26,7 @@ class StatusController extends Controller
     {
         $status = Status::create(['name'=> $request->name]);
 
-        if($request->email['subject']){
+        if($request->hasEmail){
             $status->email()->create([
                 'subject' => $request->email['subject'],
                 'body' => $request->email['body']
@@ -45,7 +45,7 @@ class StatusController extends Controller
     {
         $status->update(['name' => $request->name]);
 
-        if($request->email['subject']){
+        if($request->hasEmail){
             $status->email()->updateOrCreate(
                 ['status_id' => $status->id],
                 [
@@ -54,7 +54,6 @@ class StatusController extends Controller
                 ]
             );
         }else{
-            //TODO: this
             $status->email()?->delete();
         }
         return redirect(route('hr.statuses.index'));

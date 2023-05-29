@@ -24,8 +24,9 @@ class StoreStatusRequest extends FormRequest
         //TODO change the messages
         return [
             'name' => ['required', 'max:120'],
-            'email.subject' => ['required_with:email.body', 'max:120'],
-            'email.body' => ['required_with:email.subject', 'max:500'],
+            'hasEmail' => ['required', 'boolean'],
+            'email.subject' => ['required_if:hasEmail,true', 'max:120'],
+            'email.body' => ['required_if:hasEmail,true', 'max:500'],
         ];
     }
 }
