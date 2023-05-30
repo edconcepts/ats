@@ -21,6 +21,6 @@ class ApplicationStatusController extends Controller
             ApplicationStatusChangedEvent::dispatch($application);
         }
 
-        return redirect(route('hr.dashboard.index'));
+        return redirect(route('dashboard.index'));
     }
 }

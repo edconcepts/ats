@@ -24,7 +24,7 @@ defineProps({
         <div class="px-4 sm:px-6 lg:px-8">
             <div class="sm:flex sm:items-center">
                 <div class="sm:flex-auto">
-                    <h1 class="text-base font-semibold leading-6 text-gray-900">Locaties</h1>
+                    <h1 class="text-base font-semibold leading-6 text-gray-900">Filialen</h1>
                 </div>
                 <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
 <!--                    <button type="button" class="block rounded-md bg-red-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Locatie toevoegen</button>-->
@@ -47,7 +47,7 @@ defineProps({
                                 <tr v-for="location in locations" :key="location.id">
                                     <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ location.name }}</td>
                                     <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                        <Link :href="route('hr.locations.edit', location)" class="rounded bg-white px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Gebruiker beheren</Link>
+                                        <Link :href="route('hr.locations.edit', location)" class="rounded bg-white px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Filiaal beheren</Link>
                                     </td>
                                 </tr>
                                 </tbody>

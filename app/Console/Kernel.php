@@ -16,9 +16,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('app:import location')->everyMinute();
         $schedule->command('app:import vacancy')->everyMinute();
         $schedule->command('app:import application')->everyMinute();
-        $schedule->job(new SendEndInterviewEmail)->everyFiveMinutes();
-
-
+//        $schedule->job(new SendEndInterviewEmail)->everyFiveMinutes();
     }
 
     /**
