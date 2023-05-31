@@ -35,9 +35,7 @@ const openWeek = (week) => {
 
                     </div>
                     <div class="shrink-0 flex gap-4 justify-end">
-
                         <img class="h-24 w-auto" src="http://staging.werkenbijkik.nl/wp-content/uploads/2023/03/KiK_Logo_3D_4c.svg" alt="Your Company" />
-
                     </div>
                 </div>
 
@@ -65,8 +63,14 @@ const openWeek = (week) => {
                     </div>
                 </div>
 
-        <div class="flex justify-end">
-
+        <div class="flex justify-end mt-4">
+            <Link :href="route('logout')" method="post" type="button" class="flex  gap-1.5  items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                Uitloggen
+                
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="-ml-0.5 h-5 w-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                </svg>
+            </Link>
         </div>
     </StoreManagerLayout>
 </template>
