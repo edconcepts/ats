@@ -53,6 +53,6 @@ class LocationController extends Controller
                 $values,
             );
 
-        return redirect()->route('hr.locations.index');
+        return redirect()->route('locations.index');
     }
 }

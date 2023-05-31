@@ -38,7 +38,7 @@ class StatusController extends Controller
             ]);
         }
 
-        return redirect(route('hr.statuses.index'));
+        return redirect(route('statuses.index'));
     }
 
     public function edit(Status $status)
@@ -61,7 +61,7 @@ class StatusController extends Controller
         }else{
             $status->email()?->delete();
         }
-        return redirect(route('hr.statuses.index'));
+        return redirect(route('statuses.index'));
 
     }
 }

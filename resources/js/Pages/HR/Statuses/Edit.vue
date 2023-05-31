@@ -27,7 +27,7 @@ const shortcodes = [
 const hasEmail = ref(props.status.email ? true : false);
 
 const updateStatus = (status) => {
-    form.put(route('hr.statuses.update',status));
+    form.put(route('statuses.update',status));
 };
 
 const insertIntoBody = (event) => {

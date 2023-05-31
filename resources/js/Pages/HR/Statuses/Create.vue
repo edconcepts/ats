@@ -23,7 +23,7 @@ const shortcodes = [
 // const hasEmail = ref(false);
 
 const createStatus = () => {
-    form.post(route('hr.statuses.store'));
+    form.post(route('statuses.store'));
 };
 
 const insertIntoBody = (event) => {
