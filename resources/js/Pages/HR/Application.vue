@@ -19,7 +19,7 @@ const timeSlotForm = useForm({
 
 
 const changeStatus = (application, status) => {
-    statusForm.put(route('hr.applications.status.update', application), {
+    statusForm.put(route('applications.status.update', application), {
         status: status
     })
     close()
@@ -36,7 +36,7 @@ const saveTimeSlot = (application, timeSlot) => {
 }
 
 const archive = (application) => {
-    router.put(route('hr.applications.archive.update',application));
+    router.put(route('applications.archive.update',application));
     close()
 }
 </script>

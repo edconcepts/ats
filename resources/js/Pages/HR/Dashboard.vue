@@ -54,13 +54,13 @@ const saveChanges = () => {
 }
 
 const updateApplicationStatus = (application,status) => {
-    router.put(route('hr.applications.status.update',application), {
+    router.put(route('applications.status.update',application), {
         status: status
     });
 };
 
 const showApplication = (application) => {
-    router.visit(route('hr.dashboard.application.show',application));
+    router.visit(route('dashboard.application.show',application));
 };
 
 let search = ref('');

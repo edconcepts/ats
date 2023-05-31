@@ -10,6 +10,11 @@ use Inertia\Inertia;
 
 class StatusController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Status::class, 'status');
+    }
+
     public function index()
     {
         return Inertia::render('HR/Statuses/Overview', [
@@ -33,7 +38,7 @@ class StatusController extends Controller
             ]);
         }
 
-        return redirect(route('hr.statuses.index'));
+        return redirect(route('statuses.index'));
     }
 
     public function edit(Status $status)
@@ -56,7 +61,7 @@ class StatusController extends Controller
         }else{
             $status->email()?->delete();
         }
-        return redirect(route('hr.statuses.index'));
+        return redirect(route('statuses.index'));
 
     }
 }

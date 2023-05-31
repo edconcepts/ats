@@ -47,7 +47,7 @@ defineProps({
                                 <tr v-for="location in locations" :key="location.id">
                                     <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ location.name }}</td>
                                     <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                        <Link :href="route('hr.locations.edit', location)" class="rounded bg-white px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Filiaal beheren</Link>
+                                        <Link :href="route('locations.edit', location)" class="rounded bg-white px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Filiaal beheren</Link>
                                     </td>
                                 </tr>
                                 </tbody>

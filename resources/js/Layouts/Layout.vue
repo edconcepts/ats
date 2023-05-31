@@ -112,12 +112,17 @@ import {
 } from '@heroicons/vue/24/outline'
 
 // if (usePage().props.user)
+
 const navigation =
     {
         hr: [
             { name: 'Dashboard', href: route('dashboard'), icon: HomeIcon, current: route().current('hr.dashboard.index'), method:false },
-            { name: 'Filialen', href: route('hr.locations.index'), icon: MapPinIcon, current: route().current('hr.locations.index'), method:false },
-            { name: 'Statussen', href: route('hr.statuses.index'), icon: TagIcon, current: route().current('hr.statuses*'), method:false },
+            { name: 'Uitloggen', href: route('logout'), icon: ArrowLeftOnRectangleIcon, current: false, method: 'post' },
+        ],
+        admin: [
+            { name: 'Dashboard', href: route('dashboard'), icon: HomeIcon, current: route().current('hr.dashboard.index'), method:false },
+            { name: 'Filialen', href: route('locations.index'), icon: MapPinIcon, current: route().current('hr.locations.index'), method:false },
+            { name: 'Statussen', href: route('statuses.index'), icon: TagIcon, current: route().current('hr.statuses*'), method:false },
             { name: 'Uitloggen', href: route('logout'), icon: ArrowLeftOnRectangleIcon, current: false, method: 'post' },
         ],
         store_manager: [

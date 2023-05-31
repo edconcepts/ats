@@ -12,6 +12,11 @@ use Inertia\Inertia;
 
 class LocationController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Location::class, 'location');
+    }
+
     public function index()
     {
         //TODO pass only necessory columns on this and status
@@ -48,6 +53,6 @@ class LocationController extends Controller
                 $values,
             );
 
-        return redirect()->route('hr.locations.index');
+        return redirect()->route('locations.index');
     }
 }

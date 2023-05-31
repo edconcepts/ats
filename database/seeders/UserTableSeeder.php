@@ -23,6 +23,13 @@ class UserTableSeeder extends Seeder
             'email' => 'hr@example.com',
             'role' => 'hr'
         ]);
+
+        \App\Models\User::factory()->create([
+            'name' => 'Test Admin User',
+            'email' => 'admin@example.com',
+            'role' => 'admin'
+        ]);
+
         \App\Models\User::factory()->create([
             'name' => 'Test Store Manager User',
             'email' => 'storemanager@example.com',

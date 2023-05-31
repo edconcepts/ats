@@ -18,7 +18,7 @@ const form = useForm({
 
 
 const updateUser = (location) => {
-    form.put(route('hr.locations.update', { location: location.id }));
+    form.put(route('locations.update', { location: location.id }));
 };
 </script>
 
