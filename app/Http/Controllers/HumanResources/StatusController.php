@@ -10,6 +10,11 @@ use Inertia\Inertia;
 
 class StatusController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Status::class, 'status');
+    }
+
     public function index()
     {
         return Inertia::render('HR/Statuses/Overview', [

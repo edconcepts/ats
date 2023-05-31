@@ -12,6 +12,11 @@ use Inertia\Inertia;
 
 class LocationController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Location::class, 'location');
+    }
+
     public function index()
     {
         //TODO pass only necessory columns on this and status
