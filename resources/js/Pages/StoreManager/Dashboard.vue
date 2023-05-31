@@ -56,9 +56,9 @@ const openWeek = (week) => {
                         </svg>
                     </button>
                 </div>
-                <div class="grid grid-cols-5 w-full mt-4 gap-4">
+                <div class="grid grid-cols-7 w-full mt-4 gap-4">
                     <div v-for="day in days">
-                        <div class="text-gray-900 bg-red-400 text-white font-bold text-lg px-4 py-3 border-b border-gray-50">{{ day.formatted }}</div>
+                        <div class="text-gray-900 bg-red-400 text-white font-bold text-lg px-4 py-3 border-b border-gray-50">{{ day.localized }}</div>
                         <label class="flex bg-white hover:cursor-pointer hover:bg-red-50 items-center gap-2 py-2 px-4 " v-for="timeslot in day.timeslots">
                             <input type="checkbox" :checked="timeslot.is_checked" @change="saveTimeSlot(timeslot)">{{ timeslot.formatted }} - {{ timeslot.end_formatted }}
                         </label>
