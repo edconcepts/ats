@@ -65,6 +65,9 @@ class DashboardController extends Controller
                 $timeslots = [];
                 for ($i = 8; $i <= 21; $i++) {
                     $timeslots[] = [
+                        'appointment' => auth()->user()->timeSlots()
+                            ->where('start', $startDate->copy()->setHour($i)->setMinute(0)->setSecond(0)->format('Y-m-d H:i:s'))
+                            ->first()?->application?->toArray() ?? null,
                         'iso' => $startDate->copy()->setHour($i)->setMinute(0),
                         'formatted' => $startDate->copy()->setHour($i)->setMinute(0)->format('H:i'),
                         'end_formatted' => $startDate->copy()->setHour($i + 1)->setMinute(0)->format('H:i'),

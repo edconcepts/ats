@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicationTimeSlotController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StoreManager\ApplicationStatusController;
@@ -38,4 +39,5 @@ Route::post('/timeslots/store', TimeSlotController::class)
     ->name('store-manager.timeslot');
 
 Route::get('/applications/{application}/statuses/{status}', [ApplicationStatusController::class, 'update'])->name('store-manager.application-status.update');
+Route::post('/applications/{application}/timeslot/{timeSlot}', [ApplicationTimeSlotController::class, 'store'])->name('application.timeslot.store');
 require __DIR__.'/auth.php';
