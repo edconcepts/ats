@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\ApplicationTimeSlotController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StoreManager\ApplicationStatusController;
+use App\Http\Controllers\StoreManager\TimeSlotController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -16,18 +20,14 @@ use Inertia\Inertia;
 |
 */
 
+Route::get('/test',function(){
+    return 0;
+});
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return redirect()->route('login');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -35,22 +35,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::prefix('hr')->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('HR/Dashboard');
-    })->name('hr.dashboard');
+Route::post('/timeslots/store', TimeSlotController::class)
+    ->name('store-manager.timeslot');
 
-    Route::get('/statuses', function () {
-        return Inertia::render('HR/Statuses/Overview');
-    })->name('hr.statuses');
-
-    Route::get('/statuses/create', function () {
-        return Inertia::render('HR/Statuses/Create');
-    })->name('hr.statuses.create');
-
-    Route::get('/locations', function () {
-        return Inertia::render('HR/Locations');
-    })->name('hr.locations');
-});
-
+Route::get('/applications/{application}/statuses/{status}', [ApplicationStatusController::class, 'update'])->name('store-manager.application-status.update');
+Route::post('/applications/{application}/timeslot/{timeSlot}', [ApplicationTimeSlotController::class, 'store'])->name('application.timeslot.store');
 require __DIR__.'/auth.php';

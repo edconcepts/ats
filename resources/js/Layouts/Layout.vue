@@ -1,4 +1,5 @@
 <template>
+    <Modal />
     <div>
 <TransitionRoot as="template" :show="sidebarOpen">
     <Dialog as="div" class="relative z-50 lg:hidden" @close="sidebarOpen = false">
@@ -26,7 +27,7 @@
                             <ul role="list" class="flex flex-1 flex-col gap-y-7">
                                 <li>
                                     <ul role="list" class="-mx-2 space-y-1">
-                                        <li v-for="item in navigation" :key="item.name">
+                                        <li v-for="item in navigation[$page.props.auth.user.role]" :key="item.name">
                                             <a :href="item.href" :class="[item.current ? 'bg-gray-50 text-red-600' : 'text-gray-700 hover:text-red-600 hover:bg-gray-50', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
                                                 <component :is="item.icon" :class="[item.current ? 'text-red-600' : 'text-gray-400 group-hover:text-red-600', 'h-6 w-6 shrink-0']" aria-hidden="true" />
                                                 {{ item.name }}
@@ -54,11 +55,14 @@
             <ul role="list" class="flex flex-1 flex-col gap-y-7">
                 <li>
                     <ul role="list" class="-mx-2 space-y-1">
-                        <li v-for="item in navigation" :key="item.name">
-                            <a :href="item.href" :class="[item.current ? 'bg-gray-50 text-red-600' : 'text-gray-700 hover:text-red-600 hover:bg-gray-50', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
+                        <li v-for="item in navigation[$page.props.auth.user.role]" :key="item.name">
+                            <Link
+                                :href="item.href"
+                                :class="[item.current ? 'bg-gray-50 text-red-600' : 'text-gray-700 hover:text-red-600 hover:bg-gray-50', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']"
+                                :method="item.method ? item.method : 'get'">
                                 <component :is="item.icon" :class="[item.current ? 'text-red-600' : 'text-gray-400 group-hover:text-red-600', 'h-6 w-6 shrink-0']" aria-hidden="true" />
                                 {{ item.name }}
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </li>
@@ -90,6 +94,8 @@
 
 <script setup>
 import { ref } from 'vue'
+import {Link, usePage} from '@inertiajs/vue3';
+import { Modal } from "momentum-modal";
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import {
     ArrowLeftOnRectangleIcon,
@@ -105,12 +111,28 @@ import {
     XMarkIcon,
 } from '@heroicons/vue/24/outline'
 
-const navigation = [
-    { name: 'Dashboard', href: route('hr.dashboard'), icon: HomeIcon, current: route().current('hr.dashboard') },
-    { name: 'Locaties', href: route('hr.locations'), icon: MapPinIcon, current: route().current('hr.locations') },
-    { name: 'Statussen', href: route('hr.statuses'), icon: TagIcon, current: route().current('hr.statuses*') },
-    { name: 'Uitloggen', href: '#', icon: ArrowLeftOnRectangleIcon, current: false },
-]
+// if (usePage().props.user)
+
+const navigation =
+    {
+        hr: [
+            { name: 'Dashboard', href: route('dashboard'), icon: HomeIcon, current: route().current('dashboard.index'), method:false },
+            { name: 'Uitloggen', href: route('logout'), icon: ArrowLeftOnRectangleIcon, current: false, method: 'post' },
+        ],
+        admin: [
+            { name: 'Dashboard', href: route('dashboard'), icon: HomeIcon, current: route().current('dashboard.index'), method:false },
+            { name: 'Filialen', href: route('locations.index'), icon: MapPinIcon, current: route().current('locations.index'), method:false },
+            { name: 'Statussen', href: route('statuses.index'), icon: TagIcon, current: route().current('statuses*'), method:false },
+            { name: 'Uitloggen', href: route('logout'), icon: ArrowLeftOnRectangleIcon, current: false, method: 'post' },
+        ],
+        store_manager: [
+            { name: 'Dashboard', href: route('dashboard'), icon: HomeIcon, current: route().current('dashboard.index'), method:false },
+            { name: 'Uitloggen', href: route('logout'), icon: ArrowLeftOnRectangleIcon, current: false, method: 'post' },
+        ]
+    }
+
+
+console.log(navigation)
 
 const sidebarOpen = ref(false)
 </script>
