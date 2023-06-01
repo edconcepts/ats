@@ -1,19 +1,30 @@
 <script setup>
 import Layout from '@/Layouts/Layout.vue';
-import { Head, router } from '@inertiajs/vue3';
-
+import { Head } from '@inertiajs/vue3';
 import { MagnifyingGlassIcon, ArchiveBoxArrowDownIcon } from "@heroicons/vue/24/outline";
 import draggable from "vuedraggable/src/vuedraggable";
-import {onMounted, ref, watch} from "vue";
+import {onMounted, ref} from "vue";
 import {useAutoAnimate} from "@formkit/auto-animate/vue";
 import autoAnimate from "@formkit/auto-animate";
-import debounce from 'lodash/debounce';
+
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { ExclamationTriangleIcon } from '@heroicons/vue/24/outline'
 
-const props = defineProps({
-    statuses : Object
-});
+
+const statusses = ref([
+    { name: 'Gesolliciteerd', candidates: [
+        { id: 1, name: 'John Doe', date: '09-05-2023', job: 'Bijbaan vacature', },
+        { id: 2, name: 'Arko Elsenaar', date: '09-05-2023', job: 'Bijbaan vacature', },
+        { id: 3, name: 'Enrico Duinkerken', date: '09-05-2023', job: 'Bijbaan vacature', },
+    ] },
+    { name: 'Afgewezen', candidates: [] },
+    { name: 'Gebeld geen contact', candidates: [], },
+    { name: '2e keer gebeld geen contact', candidates: [], },
+    { name: 'Gesprek ingepland', candidates: [], },
+    { name: '2e gesprek ingepland', candidates: [], },
+    { name: 'Contract aangeboden', candidates: [], },
+    { name: 'Hired', candidates: [], },
+]);
 
 const changes = ref({
     oldStatus: null,
@@ -34,8 +45,8 @@ const onDragEnd = (event, statusIndex) => {
 
 const revertChanges = () => {
     // TODO: maybe find a way to keep the old indexes?
-    props.statuses[changes.value.oldStatus].candidates.push(changes.value.element);
-    props.statuses[changes.value.newStatus].candidates.splice(changes.value.element, 1);
+    statusses.value[changes.value.oldStatus].candidates.push(changes.value.element);
+    statusses.value[changes.value.newStatus].candidates.splice(changes.value.element, 1);
 
     changes.value = {
         oldStatus: null,
@@ -45,32 +56,12 @@ const revertChanges = () => {
 };
 
 const saveChanges = () => {
-    updateApplicationStatus(changes.value.element.id, props.statuses[changes.value.newStatus].id);
     changes.value = {
         oldStatus: null,
         newStatus: null,
         element: null,
     };
 }
-
-const updateApplicationStatus = (application,status) => {
-    router.put(route('applications.status.update',application), {
-        status: status
-    });
-};
-
-const showApplication = (application) => {
-    router.visit(route('dashboard.application.show',application));
-};
-
-let search = ref('');
-watch(search, debounce(function(value){
-  router.get(
-    route('dashboard'),
-    { search: value },
-    { preserveState: true, replace: true }
-  )
-},300));
 </script>
 
 <template>
@@ -86,33 +77,26 @@ watch(search, debounce(function(value){
                 <form class="relative flex flex-1" action="#" method="GET">
                     <label for="search-field" class="sr-only">Zoeken</label>
                     <MagnifyingGlassIcon class="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400" aria-hidden="true" />
-                    <input
-                        id="search-field"
-                        class="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
-                        placeholder="Zoeken door alle vacatures"
-                        type="search"
-                        name="search"
-                        v-model="search"
-                    />
+                    <input id="search-field" class="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm" placeholder="Zoeken door alle vacatures" type="search" name="search" />
                 </form>
             </div>
         </div>
         <div class="flex gap-8 overflow-auto h-full pb-8">
-            <div v-for="(status, index) in statuses" class="bg-white shadow-sm basis-80 flex-shrink-0">
+            <div v-for="(status, index) in statusses" class="bg-white shadow-sm basis-80 flex-shrink-0">
                 <div class="text-gray-900 bg-red-400 text-white font-bold text-lg px-4 py-3 border-b border-gray-50">
                     {{ status.name }}</div>
                 <draggable
-                    :list="statuses[index].candidates"
+                    :list="statusses[index].candidates"
                     group="candidates"
                     item-key="id"
                     ghost-class="ghosting"
                     drag-class="dragging"
-                    @change="onDragEnd($event,index )"
+                    @change="onDragEnd($event, index)"
                     class="bg-white min-h-[100px]"
                     ref="parent"
                 >
                     <template #item="{ element, index }">
-                        <div @click="showApplication(element)" class="p-4 border-b last-of-type:border-0"
+                        <div class="p-4 border-b last-of-type:border-0"
                             :class="element"
                         >
                             <div class="flex justify-between items-center">
@@ -128,15 +112,7 @@ watch(search, debounce(function(value){
 
         <TransitionRoot as="template" :show="changes.newStatus !== null">
             <Dialog as="div" class="relative z-50">
-                <TransitionChild
-                    as="template"
-                    enter="ease-out duration-300"
-                    enter-from="opacity-0"
-                    enter-to="opacity-100"
-                    leave="ease-in duration-200"
-                    leave-from="opacity-100"
-                    leave-to="opacity-0"
-                >
+                <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0" enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
                     <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
                 </TransitionChild>
 
@@ -151,7 +127,7 @@ watch(search, debounce(function(value){
                                     <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                                         <DialogTitle as="h3" class="text-base font-semibold leading-6 text-gray-900">Status wijzigen</DialogTitle>
                                         <div class="mt-2">
-                                            <p class="text-sm text-gray-500">Weet je zeker dat je <span class="font-bold">{{ changes.element?.name }}</span> wilt verplaatsen naar <span class="font-bold">{{ statuses[changes?.newStatus]?.name }}</span>?</p>
+                                            <p class="text-sm text-gray-500">Weet je zeker dat je <span class="font-bold">{{ changes.element?.name }}</span> wilt verplaatsen naar <span class="font-bold">{{ statusses[changes?.newStatus]?.name }}</span>?</p>
                                         </div>
                                     </div>
                                 </div>
