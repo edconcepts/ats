@@ -17,9 +17,7 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('', function (Blueprint $table) {
-            $table->dropColumn('start');
-            $table->dateTime('from_date_time');
-            $table->dateTime('to_date_time');
+
         });
     }
 };

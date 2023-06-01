@@ -9,12 +9,29 @@ class StatusPolicy
     /**
      * Create a new policy instance.
      */
-    public function before(User $user, string $ability): bool|null
+    public function index(User $user): bool
     {
-        if ($user->roll === 'admin' ) {
-            return true;
-        }
-
-        return null;
+        return $user->isAdmin;
     }
+
+    public function edit(User $user): bool
+    {
+        return $user->isAdmin;
+    }
+
+    public function update(User $user): bool
+    {
+        return $user->isAdmin;
+    }
+
+    public function create(User $user): bool
+    {
+        return $user->isAdmin;
+    }
+
+    public function store(User $user): bool
+    {
+        return $user->isAdmin;
+    }
+
 }

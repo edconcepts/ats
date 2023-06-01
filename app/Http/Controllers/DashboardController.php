@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\HR\StatusResource;
 use App\Models\Application;
+use App\Models\Location;
 use App\Models\Status;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class DashboardController extends Controller
     public function __invoke()
     {
         //TODO: refactor this filtering, and also maybe change dashbaords links
-        if(auth()->user()->isHR) {
+        if(auth()->user()->isHR or auth()->user()->isAdmin) {
             $statuses = Status::query()
                 ->when(request()->input('search'), function($query, $search){
                     $query->whereHas('applications', function(Builder $query) use ($search){

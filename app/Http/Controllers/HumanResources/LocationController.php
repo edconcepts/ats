@@ -12,14 +12,11 @@ use Inertia\Inertia;
 
 class LocationController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(Location::class, 'location');
-    }
 
     public function index()
     {
-        //TODO pass only necessory columns on this and status
+        $this->authorize('index', Location::class);
+
         return Inertia::render('HR/Locations/Overview',[
             'locations' => Location::all()
         ]);
@@ -27,6 +24,8 @@ class LocationController extends Controller
 
     public function edit(Location $location)
     {
+        $this->authorize('edit', $location);
+
         return Inertia::render('HR/Locations/Edit',[
             'location' => $location->load('manager')
         ]);
@@ -34,6 +33,8 @@ class LocationController extends Controller
 
     public function update(UpdateStoreManagerRequest $request, Location $location)
     {
+        $this->authorize('update', $location);
+
         $values = [
             'email' => $request->input('email'),
             'name' => $request->input('name'),

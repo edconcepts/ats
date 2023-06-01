@@ -10,13 +10,11 @@ use Inertia\Inertia;
 
 class StatusController extends Controller
 {
-    public function __construct()
-    {
-        $this->authorizeResource(Status::class, 'status');
-    }
 
     public function index()
     {
+        $this->authorize('index', Status::class);
+
         return Inertia::render('HR/Statuses/Overview', [
                 'statuses' => Status::all()
         ]);
@@ -24,11 +22,14 @@ class StatusController extends Controller
 
     public function create()
     {
+        $this->authorize('create', Status::class);
         return Inertia::render('HR/Statuses/Create');
     }
 
     public function store(StoreStatusRequest $request)
     {
+        $this->authorize('store', Status::class);
+
         $status = Status::create(['name'=> $request->name]);
 
         if($request->hasEmail){
@@ -43,11 +44,15 @@ class StatusController extends Controller
 
     public function edit(Status $status)
     {
+        $this->authorize('edit', $status);
+
         return Inertia::render('HR/Statuses/Edit', ['status' => $status->load('email')]);
     }
 
     public function update(Status $status, StoreStatusRequest $request)
     {
+        $this->authorize('update', $status);
+
         $status->update(['name' => $request->name]);
 
         if($request->hasEmail){

@@ -6,23 +6,18 @@ use App\Models\User;
 
 class LocationPolicy
 {
-    /**
-     * Create a new policy instance.
-     */
-    public function __construct()
-    {
-        //
-    }
     public function index(User $user): bool
     {
-        return $user->role == 'admin';
+        return $user->isAdmin;
     }
+
     public function edit(User $user): bool
     {
-        return $user->role == 'admin';
+        return $user->isAdmin;
     }
+
     public function update(User $user): bool
     {
-        return $user->role == 'admin';
+        return $user->isAdmin;
     }
 }

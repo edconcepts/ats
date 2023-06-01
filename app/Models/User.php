@@ -71,6 +71,14 @@ class User extends Authenticatable
             }
         );
     }
+    protected function isAdmin(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                return $this->role == 'admin';
+            }
+        );
+    }
 
     protected function isStoreManager(): Attribute
     {
