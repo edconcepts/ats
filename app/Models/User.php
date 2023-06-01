@@ -3,8 +3,6 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -23,8 +21,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'location_id',
-        'role',
     ];
 
     /**
@@ -45,47 +41,4 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    // relationships
-
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class);
-    }
-
-    public function timeSlots()
-    {
-        return $this->hasMany(StoreManagerTimeSlot::class);
-    }
-
-    public function location()
-    {
-        return $this->hasOne(Location::class);
-    }
-
-    protected function isHR(): Attribute
-    {
-        return Attribute::make(
-            get: function () {
-                return $this->role == 'hr';
-            }
-        );
-    }
-    protected function isAdmin(): Attribute
-    {
-        return Attribute::make(
-            get: function () {
-                return $this->role == 'admin';
-            }
-        );
-    }
-
-    protected function isStoreManager(): Attribute
-    {
-        return Attribute::make(
-            get: function () {
-                return $this->role == 'store_manager';
-            }
-        );
-    }
 }
