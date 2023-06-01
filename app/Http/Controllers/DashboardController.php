@@ -57,15 +57,18 @@ class DashboardController extends Controller
         $weekNumber = $weekNumber ?? Carbon::now()->weekOfYear;
 
         $startDate = Carbon::now()->setISODate(Carbon::now()->year, $weekNumber, 1);
-        $endDate = Carbon::now()->setISODate(Carbon::now()->year, $weekNumber, 5);
+        $endDate = Carbon::now()->setISODate(Carbon::now()->year, $weekNumber, 7);
 
         $workdays = [];
 
         while ($startDate <= $endDate) {
-            if ($startDate->isWeekday()) {
+//            if ($startDate->isWeekday()) {
                 $timeslots = [];
-                for ($i = 8; $i <= 18; $i++) {
+                for ($i = 8; $i <= 21; $i++) {
                     $timeslots[] = [
+                        'appointment' => auth()->user()->timeSlots()
+                            ->where('start', $startDate->copy()->setHour($i)->setMinute(0)->setSecond(0)->format('Y-m-d H:i:s'))
+                            ->first()?->application?->toArray() ?? null,
                         'iso' => $startDate->copy()->setHour($i)->setMinute(0),
                         'formatted' => $startDate->copy()->setHour($i)->setMinute(0)->format('H:i'),
                         'end_formatted' => $startDate->copy()->setHour($i + 1)->setMinute(0)->format('H:i'),
@@ -76,11 +79,12 @@ class DashboardController extends Controller
                 $workday = [
                     'iso' => $startDate->copy(),
                     'formatted' => $startDate->format('d-m-Y'),
+                    'localized' => $startDate->locale('nl')->isoFormat('dddd D MMMM'),
                     'timeslots' => $timeslots,
                 ];
 
                 $workdays[] = $workday;
-            }
+//            }
 
             $startDate->addDay();
         }

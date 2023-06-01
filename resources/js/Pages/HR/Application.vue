@@ -26,10 +26,13 @@ const changeStatus = (application, status) => {
 }
 
 const saveTimeSlot = (application, timeSlot) => {
-    timeSlotForm.post(route('applications.interviews.store', application), {
+    console.log()
+    timeSlotForm.post(route('application.timeslot.store', [ application, {
+        id: timeSlotForm.timeSlot
+    } ]), {
         timeSlot : timeSlot
     })
-    close()
+    alert('test')
 }
 
 const archive = (application) => {
@@ -156,8 +159,6 @@ const archive = (application) => {
                                                     Inplannen
                                                 </button>
                                             </div>
-
-
                                         </div>
                                     </div>
                                 </div>
