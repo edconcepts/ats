@@ -39,8 +39,9 @@ class UserLoggedInListener
         try {
              // send the code to the user via SMS
              $event->user->notify(new TwoFactorAuthenticationCodeNotification($event->user));
-        } catch (\RuntimeException $exception) {
+        } catch (\RuntimeException $e) {
             // Credentials not set. Probably local environment.
+            report($e);
         }
     }
 }

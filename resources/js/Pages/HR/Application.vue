@@ -139,6 +139,13 @@
                                                     @click="saveTimeSlot(application)">
                                                     Inplannen
                                                 </button>
+
+                                                <button v-if="interviewTimeSlot"
+                                                    type="button"
+                                                    class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto"
+                                                    @click="cancelInterview(application)">
+                                                    Interview annuleren
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -202,6 +209,10 @@
         timeSlotForm.post(route('applications.interviews.store', application), {
             timeSlot: timeSlot
         })
+    }
+
+    const cancelInterview = (application) => {
+        timeSlotForm.post(route('applications.interviews.cancel', application))
     }
 
     const archive = (application) => {
