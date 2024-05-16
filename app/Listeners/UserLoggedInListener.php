@@ -36,7 +36,11 @@ class UserLoggedInListener
         $event->user->two_factor_expires_at = now()->addMinutes(10);
         $event->user->save();
 
-         // send the code to the user via SMS
-         $event->user->notify(new TwoFactorAuthenticationCodeNotification($event->user));
+        try {
+             // send the code to the user via SMS
+             $event->user->notify(new TwoFactorAuthenticationCodeNotification($event->user));
+        } catch (\RuntimeException $exception) {
+            // Credentials not set. Probably local environment.
+        }
     }
 }

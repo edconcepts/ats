@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Application;
 use App\Models\StoreManagerTimeSlot;
-use App\Notifications\InterviewScheduled;
 use App\Notifications\InterviewScheduledNotification;
 
 class ApplicationTimeSlotController extends Controller

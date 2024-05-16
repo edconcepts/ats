@@ -1,65 +1,4 @@
-<script setup>
-import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from "@headlessui/vue"
-import {router, useForm, usePage} from "@inertiajs/vue3";
-import { useModal } from "momentum-modal"
-import {computed, onMounted, ref} from "vue";
-import debounce from "lodash/debounce";
 
-const props = defineProps({
-    application: Object,
-    statuses: Object,
-    interviewTimeSlot: Object
-})
-
-const { show, close, redirect } = useModal()
-
-const statusForm = useForm({
-    status: props.application?.status?.id
-});
-
-const timeSlotForm = useForm({
-    timeSlot: props.interviewTimeSlot?.id,
-});
-
-const user = computed(() => usePage().props.auth.user)
-
-const changeStatus = (application, status) => {
-    statusForm.put(route('applications.status.update', application), {
-        status: status
-    })
-    close()
-}
-
-const saveTimeSlot = (application, timeSlot) => {
-    timeSlotForm.post(route('applications.interviews.store', application), {
-        timeSlot : timeSlot
-    })
-}
-
-const archive = (application) => {
-    router.put(route('applications.archive.update',application));
-    close()
-}
-
-const downloadResume = (application) => {
-    window.open(route('applications.resume.download', application))
-}
-
-const notes = ref(props.application?.notes)
-
-const onInput = debounce(() => {
-    router.put(route('application.update_notes', props.application), {
-        notes: notes.value
-    })
-}, 500)
-</script>
-
-<style>
-@media(max-width: 807px){
-    .flex.gap-24{
-        flex-wrap: wrap;
-    }
-}</style>
 
 <template>
     <TransitionRoot appear as="template" :show="show">
@@ -218,3 +157,67 @@ const onInput = debounce(() => {
         </Dialog>
     </TransitionRoot>
 </template>
+
+<style>
+    @media (max-width: 807px) {
+        .flex.gap-24 {
+            flex-wrap: wrap;
+        }
+    }
+</style>
+
+<script setup>
+    import {TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle} from "@headlessui/vue"
+    import {router, useForm, usePage} from "@inertiajs/vue3";
+    import {useModal} from "momentum-modal"
+    import {computed, onMounted, ref} from "vue";
+    import debounce from "lodash/debounce";
+
+    const props = defineProps({
+        application: Object,
+        statuses: Object,
+        interviewTimeSlot: Object
+    })
+
+    const {show, close, redirect} = useModal()
+
+    const statusForm = useForm({
+        status: props.application?.status?.id
+    });
+
+    const timeSlotForm = useForm({
+        timeSlot: props.interviewTimeSlot?.id,
+    });
+
+    const user = computed(() => usePage().props.auth.user)
+
+    const changeStatus = (application, status) => {
+        statusForm.put(route('applications.status.update', application), {
+            status: status
+        })
+        close()
+    }
+
+    const saveTimeSlot = (application, timeSlot) => {
+        timeSlotForm.post(route('applications.interviews.store', application), {
+            timeSlot: timeSlot
+        })
+    }
+
+    const archive = (application) => {
+        router.put(route('applications.archive.update', application));
+        close()
+    }
+
+    const downloadResume = (application) => {
+        window.open(route('applications.resume.download', application))
+    }
+
+    const notes = ref(props.application?.notes)
+
+    const onInput = debounce(() => {
+        router.put(route('application.update_notes', props.application), {
+            notes: notes.value
+        })
+    }, 500)
+</script>
