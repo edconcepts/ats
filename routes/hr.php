@@ -24,8 +24,8 @@ Route::post('/dashboard/create_application', [DashboardController::class, 'store
 Route::get('/send-notifications', [ SendNotificationController::class, 'index' ])->name('notification-send.index');
 Route::post('/send-notifications', [ SendNotificationController::class, 'store' ])->name('notification-send.store');
 
-Route::resource('/statuses', StatusController::class)->only([
-    'index', 'store' , 'create', 'edit', 'update'
+Route::resource('/statuses', StatusController::class)->except([
+    'show',
 ])->middleware('role:admin');
 
 Route::resource('/vacancies', VacancyController::class)->only([
