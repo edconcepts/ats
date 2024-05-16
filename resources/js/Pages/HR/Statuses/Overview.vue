@@ -1,26 +1,5 @@
-<script setup>
-import Layout from '@/Layouts/Layout.vue';
-import { Head } from '@inertiajs/vue3';
-import {ref} from "vue";
-import {Link} from "@inertiajs/vue3";
-
-defineProps({
-    statuses : Array,
-    archive_status_id : Number
-});
-// const statuses = ref([
-//     { id: 1, name: 'Gesolliciteerd' },
-//     { id: 2, name: 'Afgewezen' },
-//     { id: 3, name: 'Gebeld geen contact' },
-//     { id: 4, name: '2e keer gebeld geen contact' },
-//     { id: 5, name: 'Gesprek ingepland' },
-//     { id: 6, name: '2e gesprek ingepland' },
-
-// ]);
-</script>
-
 <template>
-    <Head title="Dashboard" />
+    <Head title="Statussen"/>
 
     <Layout>
         <div class="px-4 sm:px-6 lg:px-8">
@@ -38,23 +17,37 @@ defineProps({
                         <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
                             <table class="min-w-full divide-y divide-gray-300">
                                 <thead class="bg-gray-50">
-                                <tr>
-                                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Naam</th>
-                                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                                        <span class="sr-only">Bewerken</span>
-                                    </th>
-                                </tr>
+                                    <tr>
+                                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Naam</th>
+                                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                                            <span class="sr-only">Bewerken</span>
+                                        </th>
+                                    </tr>
                                 </thead>
-                                <tbody class="divide-y divide-gray-200 bg-white">
-                                <tr v-for="status in statuses" :key="status.id" v-show="status.id !== archive_status_id">
-                                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ status.name }}</td>
-                                    <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                        <Link :href="route('statuses.edit',status)" class="text-red-600 hover:text-red-900"
-                                        >Bewerken<span class="sr-only">, {{ status.name }}</span>
-                                    </Link>
-                                    </td>
-                                </tr>
-                                </tbody>
+                                <draggable
+                                    :list="statuses"
+                                    group="statuses"
+                                    item-key="id"
+                                    ghost-class="ghosting"
+                                    drag-class="dragging"
+                                    filter="a"
+                                    @change="onDragEnd($event)"
+                                    class="divide-y divide-gray-200 bg-white"
+                                    tag="tbody"
+                                >
+                                    <template #item="{ element }">
+                                        <tr class="cursor-move" v-show="element.id !== archive_status_id">
+                                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 select-none">
+                                                {{ element.name }}
+                                            </td>
+                                            <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                                <Link :href="route('statuses.edit', element)" class="text-red-600 hover:text-red-900"
+                                                >Bewerken<span class="sr-only">, {{ element.name }}</span>
+                                            </Link>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </draggable>
                             </table>
                         </div>
                     </div>
@@ -72,3 +65,23 @@ defineProps({
         @apply bg-green-50;
     }
 </style>
+<script setup>
+    import Layout from '@/Layouts/Layout.vue';
+    import {Head, router} from '@inertiajs/vue3';
+    // import {ref} from "vue";
+    import {Link} from "@inertiajs/vue3";
+    import draggable from "vuedraggable";
+
+    defineProps({
+        statuses : Array,
+        archive_status_id : Number
+    });
+
+    const onDragEnd = (event) => {
+        router.post(route('statuses.reorder'), {
+            id: event.moved.element.id,
+            newIndex: event.moved.newIndex,
+            oldIndex: event.moved.oldIndex,
+        });
+    };
+</script>

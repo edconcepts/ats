@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -15,6 +16,11 @@ return new class extends Migration
             Schema::table('statuses', function (Blueprint $table) {
                 $table->unsignedInteger('order')->default(0)->after('name');
             });
+
+            // Set default order.
+            DB::table('statuses')->update([
+                'order' => DB::raw('id - 1')
+            ]);
         }
     }
 
