@@ -28,10 +28,10 @@
                                 <div class="px-4 sm:px-0 flex items-center justify-between">
                                     <h3 class="text-base font-semibold leading-7 text-gray-900">Sollicitatie details</h3>
                                     <div class="flex space-x-2">
-                                        <DangerButton @click="confirmDelete()" class="">
+                                        <DangerButton @click="confirmDelete()" v-if="user.role !== 'area_manager'">
                                             Verwijderen<span class="sr-only">, {{ application.name }}</span>
                                         </DangerButton>
-                                        <button v-if="user.role !== 'store_manager'" @click="archive(application)" type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3  gap-x-1.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto">
+                                        <button v-if="user.role !== 'store_manager' && user.role !== 'area_manager'" @click="archive(application)" type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3  gap-x-1.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto">
                                             Archiveren
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="-mr-0.5 h-5 w-5">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
@@ -99,7 +99,7 @@
                                             </div>
                                         </dl>
                                         <div class="w-64 py-4 shrink-0">
-                                            <div class="flex flex-col gap-2">
+                                            <div class="flex flex-col gap-2" v-if="user.role !== 'area_manager'">
                                                 <label for="location" class="block text-sm font-medium leading-6 text-gray-900">Status wijzigen</label>
                                                 <select
                                                     class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -116,7 +116,7 @@
                                                 </button>
                                             </div>
 
-                                            <div class="flex flex-col gap-2 mt-4 pt-4 border-t" v-if="user.role !== 'store_manager'">
+                                            <div class="flex flex-col gap-2 mt-4 pt-4 border-t" v-if="user.role !== 'store_manager' && user.role !== 'area_manager'">
                                                 <label for="location" class="block text-sm font-medium leading-6 text-gray-900">Gesprek inplannen</label>
 
                                                 <select
