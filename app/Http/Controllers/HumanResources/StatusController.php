@@ -8,6 +8,7 @@ use App\Http\Requests\HumanResources\StoreStatusRequest;
 use App\Models\Status;
 use App\Support\Shortcodes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class StatusController extends Controller
@@ -21,6 +22,7 @@ class StatusController extends Controller
     {
         $this->authorize('index', Status::class);
 
+        // TODO: Visible scope / query instead of hiding in DOM?
         return Inertia::render('HR/Statuses/Overview', [
             'archive_status_id' => config('status.archive_status_id'),
             'fixed_status_ids' => config('status.fixed_status_ids'),
@@ -68,7 +70,7 @@ class StatusController extends Controller
 
         $status->update(['name' => $request->name]);
 
-        if($request->hasEmail){
+        if ($request->hasEmail) {
             $status->email()->updateOrCreate(
                 ['status_id' => $status->id],
                 [
@@ -76,9 +78,10 @@ class StatusController extends Controller
                     'body' => $request->email['body']
                 ]
             );
-        }else{
+        } else {
             $status->email()?->delete();
         }
+
         return redirect()->route('statuses.index');
     }
 
@@ -91,5 +94,26 @@ class StatusController extends Controller
         //return redirect()
         //    ->back()
         //    ->with('success', "Status {$status->name} is verwijderd.");
+    }
+
+    public function reorder(Request $request): void
+    {
+        $reorderData = $request->all();
+        $newOrder = $reorderData['newIndex'];
+        $oldOrder = $reorderData['oldIndex'];
+
+        if ($newOrder > $oldOrder) {
+            DB::table('statuses')
+                ->where('order', '>=', $oldOrder)
+                ->where('order', '<=', $newOrder)
+                ->decrement('order');
+        } else {
+            DB::table('statuses')
+                ->where('order', '>=', $newOrder)
+                ->where('order', '<=', $oldOrder)
+                ->increment('order');
+        }
+
+        DB::table('statuses')->where('id', $reorderData['id'])->update(['order' => $newOrder]);
     }
 }
