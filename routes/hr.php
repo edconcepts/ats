@@ -41,9 +41,15 @@ Route::post('/vacancies/{vacancy}', [VacancyController::class, 'update'])->name(
 
 Route::post('/statuses/{status}/applications/archive', ArchiveStatusApplicationController::class)->name('statuses.applications.archive');
 
-Route::put('/applications/{application}/status', [ApplicationStatusController::class, 'update'])->name('applications.status.update');
-Route::post('/applications/{application}/interviews', [ApplicationInterviewController::class, 'store'])->name('applications.interviews.store');
-Route::put('/applications/{application}/archive', [ApplicationArchiveController::class, 'update'])->name('applications.archive.update');
+Route::as('applications.')->prefix('applications/{application}')->group(function () {
+    Route::put('status', [ApplicationStatusController::class, 'update'])->name('status.update');
+    Route::put('archive', [ApplicationArchiveController::class, 'update'])->name('archive.update');
+
+    Route::as('interviews.')->prefix('interviews')->group(function () {
+        Route::post('', [ApplicationInterviewController::class, 'store'])->name('store');
+        Route::post('cancel', [ApplicationInterviewController::class, 'cancel'])->name('cancel');
+    });
+});
 
 Route::resource('/locations' , LocationController::class)
     ->only(['index', 'edit', 'update'])->middleware('role:admin');
