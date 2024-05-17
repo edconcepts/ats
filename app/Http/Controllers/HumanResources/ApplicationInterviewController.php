@@ -59,6 +59,13 @@ class ApplicationInterviewController extends Controller
             report($e);
         }
 
+        try {
+            $application->notify(new InterviewCanceledNotification($application, $message));
+        } catch (\RuntimeException $e) {
+            // Credentials not set. Probably local environment.
+            report($e);
+        }
+
         return redirect()->route('dashboard');
     }
 }
