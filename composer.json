@@ -10,7 +10,7 @@
         "guzzlehttp/guzzle": "^7.7",
         "inertiajs/inertia-laravel": "^0.6.8",
         "joelbutcher/laravel-archivable": "^1.10",
-        "laravel/framework": "^10.8",
+        "laravel/framework": "^10.48",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "laravel/vonage-notification-channel": "^3.2",

@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Helpers\FormatHelper;
 use Exception;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,7 +18,9 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens,
+        HasFactory,
+        Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -108,17 +111,10 @@ class User extends Authenticatable
      */
     public function routeNotificationForVonage(Notification $notification): string
     {
-        $this->phone = str_replace(' ', '', $this->phone);
+        $phone = FormatHelper::formatPhoneNumber($this->phone);
 
-        if (
-            (str_starts_with($this->phone, '+31') && strlen($this->phone) === 12) ||
-            (str_starts_with($this->phone, '31') && strlen($this->phone) === 11)
-        ) {
-            return str_replace('+', '', $this->phone);
-        }
-
-        if (str_starts_with($this->phone, '06') && strlen($this->phone) === 10) {
-            return '31' . substr($this->phone, 1);
+        if (! is_null($phone)) {
+            return $phone;
         }
 
         throw new Exception('Invalid phone number');
