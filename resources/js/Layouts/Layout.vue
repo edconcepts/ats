@@ -129,6 +129,10 @@ const navigation =
 
             { name: 'Uitloggen', href: route('logout'), icon: ArrowLeftOnRectangleIcon, current: false, method: 'post' },
         ],
+        area_manager: [
+            { name: 'Dashboard', href: route('dashboard'), icon: HomeIcon, current: route().current('dashboard.index'), method:false },
+            { name: 'Uitloggen', href: route('logout'), icon: ArrowLeftOnRectangleIcon, current: false, method: 'post' },
+        ],
         store_manager: [
             { name: 'Dashboard', href: route('dashboard'), icon: HomeIcon, current: route().current('dashboard.index'), method:false },
             { name: 'Uitloggen', href: route('logout'), icon: ArrowLeftOnRectangleIcon, current: false, method: 'post' },
