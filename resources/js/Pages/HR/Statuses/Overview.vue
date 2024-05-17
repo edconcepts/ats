@@ -110,7 +110,6 @@
         deletingStatus.value = null;
     }
     const deleteStatus = () => {
-        // console.log(deletingStatus.id, deletingStatus.value.id);
         router.delete(route('statuses.destroy', {status: deletingStatus.value}));
 
         showDeleteModal.value = false;
