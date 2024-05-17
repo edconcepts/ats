@@ -20,7 +20,7 @@
                                     <tr>
                                         <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Naam</th>
                                         <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                                            <span class="sr-only">Bewerken</span>
+                                            <span class="sr-only">Acties</span>
                                         </th>
                                     </tr>
                                 </thead>
@@ -30,7 +30,7 @@
                                     item-key="id"
                                     ghost-class="ghosting"
                                     drag-class="dragging"
-                                    filter="a"
+                                    filter="a,button"
                                     @change="onDragEnd($event)"
                                     class="divide-y divide-gray-200 bg-white"
                                     tag="tbody"
@@ -41,9 +41,14 @@
                                                 {{ element.name }}
                                             </td>
                                             <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                                <Link :href="route('statuses.edit', element)" class="text-red-600 hover:text-red-900"
-                                                >Bewerken<span class="sr-only">, {{ element.name }}</span>
-                                            </Link>
+                                                <Link :href="route('statuses.edit', element)" class="text-red-600 hover:text-red-900">
+                                                    Bewerken<span class="sr-only">, {{ element.name }}</span>
+                                                </Link>
+                                                <DangerButton @click="confirmDelete(element)"
+                                                              class="ml-4"
+                                                              v-show="element.id !== archive_status_id && ! fixed_status_ids.includes(element.id)">
+                                                    Verwijderen<span class="sr-only">, {{ element.name }}</span>
+                                                </DangerButton>
                                             </td>
                                         </tr>
                                     </template>
@@ -55,6 +60,34 @@
             </div>
         </div>
     </Layout>
+
+    <Modal :show="showDeleteModal" @close="closeModal">
+        <div class="p-6">
+            <h2 class="text-lg font-medium text-gray-900">
+                Weet je zeker dat je de status '{{ deletingStatus.name }}' wilt verwijderen?
+            </h2>
+
+            <p class="mt-1 text-sm text-gray-600" v-show="deletingStatus.applications_count > 0">
+                Deze status heeft {{ deletingStatus.applications_count }} gelinkte sollicitatie(s). Bij het verwijderen
+                van deze status worden die allemaal verplaatst naar 'gesolliciteerd'.
+            </p>
+
+            <p class="mt-1 text-sm text-gray-600">
+                Dit kan niet teruggedraaid worden.
+            </p>
+
+            <div class="mt-6 flex justify-end">
+                <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+
+                <DangerButton
+                    class="ml-3"
+                    @click="deleteStatus"
+                >
+                    Verwijderen
+                </DangerButton>
+            </div>
+        </div>
+    </Modal>
 </template>
 <style scoped>
     .dragging {
@@ -67,15 +100,37 @@
 </style>
 <script setup>
     import Layout from '@/Layouts/Layout.vue';
-    import {Head, router} from '@inertiajs/vue3';
-    // import {ref} from "vue";
-    import {Link} from "@inertiajs/vue3";
+    import { Head, router } from '@inertiajs/vue3';
+    import { ref } from 'vue';
+    import { Link } from '@inertiajs/vue3';
+    import DangerButton from '@/Components/DangerButton.vue';
+    import SecondaryButton from '@/Components/SecondaryButton.vue';
+    import Modal from '@/Components/Modal.vue';
     import draggable from "vuedraggable";
 
     defineProps({
         statuses : Array,
-        archive_status_id : Number
+        archive_status_id : Number,
+        fixed_status_ids : Array,
     });
+
+    const showDeleteModal = ref(false);
+    const deletingStatus = ref(null);
+
+    const confirmDelete = (status) => {
+        showDeleteModal.value = true;
+        deletingStatus.value = status;
+    }
+    const closeModal = () => {
+        showDeleteModal.value = false;
+        deletingStatus.value = null;
+    }
+    const deleteStatus = () => {
+        router.delete(route('statuses.destroy', {status: deletingStatus.value}));
+
+        showDeleteModal.value = false;
+        deletingStatus.value = null;
+    }
 
     const onDragEnd = (event) => {
         router.post(route('statuses.reorder'), {

@@ -25,7 +25,8 @@ class StatusController extends Controller
         // TODO: Visible scope / query instead of hiding in DOM?
         return Inertia::render('HR/Statuses/Overview', [
             'archive_status_id' => config('status.archive_status_id'),
-            'statuses' => Status::all(),
+            'fixed_status_ids' => config('status.fixed_status_ids'),
+            'statuses' => Status::withCount('applications')->get(),
         ]);
     }
 
@@ -39,7 +40,7 @@ class StatusController extends Controller
 
     public function store(StoreStatusRequest $request)
     {
-        $this->authorize('store', Status::class);
+        $this->authorize('create', Status::class);
 
         $status = Status::create(['name'=> $request->name]);
 
@@ -50,12 +51,12 @@ class StatusController extends Controller
             ]);
         }
 
-        return redirect(route('statuses.index'));
+        return redirect()->route('statuses.index');
     }
 
     public function edit(Status $status)
     {
-        $this->authorize('edit', $status);
+        $this->authorize('update', $status);
 
         return Inertia::render('HR/Statuses/Edit', [
             'status' => $status->load('email'),
@@ -78,10 +79,21 @@ class StatusController extends Controller
                 ]
             );
         } else {
-            $status->email()?->delete();
+            $status->email()->delete();
         }
 
-        return redirect(route('statuses.index'));
+        return redirect()->route('statuses.index');
+    }
+
+    public function destroy(Status $status)
+    {
+        $this->authorize('delete', $status);
+
+        $status->delete();
+
+        //return redirect()
+        //    ->back()
+        //    ->with('success', "Status {$status->name} is verwijderd.");
     }
 
     public function reorder(Request $request): void
