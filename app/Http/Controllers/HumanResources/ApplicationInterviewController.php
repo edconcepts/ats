@@ -43,14 +43,14 @@ class ApplicationInterviewController extends Controller
         // TODO: Default casting as datetime would help
         $date = Carbon::createFromTimeString($application->interview->storeManagerTimeSlot->start)->format('d-m-Y H:i');
 
-        $application->interview()->delete();
+        $application->interview->delete();
 
         // TODO: Perhaps not hardcoded ID?
         // Set status to "Gesolliciteerd"
         $application->status()->associate(2);
         $application->save();
 
-        $message = "Hierbij bevestigen wij dat het gesprek op {$date} is geannuleerd. Indien nodig nemen we contact met je op";
+        $message = "Hierbij bevestigen wij dat het gesprek op {$date} is geannuleerd. Indien nodig nemen we contact met je op.";
 
         try {
             $application->vacancy->location->manager->notify(new InterviewCanceledNotification($application, $message));

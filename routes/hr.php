@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HumanResources\ApplicationArchiveController;
+use App\Http\Controllers\HumanResources\ApplicationController;
 use App\Http\Controllers\HumanResources\ApplicationInterviewController;
 use App\Http\Controllers\HumanResources\ApplicationStatusController;
 use App\Http\Controllers\HumanResources\ArchiveStatusApplicationController;
@@ -39,6 +40,8 @@ Route::post('/vacancies/{vacancy}', [VacancyController::class, 'update'])->name(
 Route::post('/statuses/{status}/applications/archive', ArchiveStatusApplicationController::class)->name('statuses.applications.archive');
 
 Route::as('applications.')->prefix('applications/{application}')->group(function () {
+    Route::delete('', [ApplicationController::class, 'destroy'])->name('destroy');
+
     Route::put('status', [ApplicationStatusController::class, 'update'])->name('status.update');
     Route::put('archive', [ApplicationArchiveController::class, 'update'])->name('archive.update');
 
