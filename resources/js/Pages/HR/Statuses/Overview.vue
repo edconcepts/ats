@@ -1,5 +1,5 @@
 <template>
-    <Head title="Dashboard" />
+    <Head title="Statussen"/>
 
     <Layout>
         <div class="px-4 sm:px-6 lg:px-8">
@@ -17,28 +17,42 @@
                         <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
                             <table class="min-w-full divide-y divide-gray-300">
                                 <thead class="bg-gray-50">
-                                <tr>
-                                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Naam</th>
-                                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                                        <span class="sr-only">Acties</span>
-                                    </th>
-                                </tr>
+                                    <tr>
+                                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">Naam</th>
+                                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                                            <span class="sr-only">Acties</span>
+                                        </th>
+                                    </tr>
                                 </thead>
-                                <tbody class="divide-y divide-gray-200 bg-white">
-                                <tr v-for="status in statuses" :key="status.id" v-show="status.id !== archive_status_id">
-                                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">{{ status.name }}</td>
-                                    <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                        <Link :href="route('statuses.edit',status)" class="text-red-600 hover:text-red-900"
-                                        >Bewerken<span class="sr-only">, {{ status.name }}</span>
-                                    </Link>
-                                        <DangerButton @click="confirmDelete(status)"
-                                              class="ml-4"
-                                              v-show="status.id !== archive_status_id && status.id !== 2">
-                                            Verwijderen<span class="sr-only">, {{ status.name }}</span>
-                                        </DangerButton>
-                                    </td>
-                                </tr>
-                                </tbody>
+                                <draggable
+                                    :list="statuses"
+                                    group="statuses"
+                                    item-key="id"
+                                    ghost-class="ghosting"
+                                    drag-class="dragging"
+                                    filter="a,button"
+                                    @change="onDragEnd($event)"
+                                    class="divide-y divide-gray-200 bg-white"
+                                    tag="tbody"
+                                >
+                                    <template #item="{ element }">
+                                        <tr class="cursor-move" v-show="element.id !== archive_status_id">
+                                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 select-none">
+                                                {{ element.name }}
+                                            </td>
+                                            <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                                <Link :href="route('statuses.edit', element)" class="text-red-600 hover:text-red-900">
+                                                    Bewerken<span class="sr-only">, {{ element.name }}</span>
+                                                </Link>
+                                                <DangerButton @click="confirmDelete(element)"
+                                                              class="ml-4"
+                                                              v-show="element.id !== archive_status_id && ! fixed_status_ids.includes(element.id)">
+                                                    Verwijderen<span class="sr-only">, {{ element.name }}</span>
+                                                </DangerButton>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </draggable>
                             </table>
                         </div>
                     </div>
@@ -55,7 +69,7 @@
 
             <p class="mt-1 text-sm text-gray-600" v-show="deletingStatus.applications_count > 0">
                 Deze status heeft {{ deletingStatus.applications_count }} gelinkte sollicitatie(s). Bij het verwijderen
-                van deze status worden die allemaal gearchiveerd.
+                van deze status worden die allemaal verplaatst naar 'gesolliciteerd'.
             </p>
 
             <p class="mt-1 text-sm text-gray-600">
@@ -87,15 +101,17 @@
 <script setup>
     import Layout from '@/Layouts/Layout.vue';
     import { Head, router } from '@inertiajs/vue3';
-    import {ref} from 'vue';
-    import {Link} from '@inertiajs/vue3';
+    import { ref } from 'vue';
+    import { Link } from '@inertiajs/vue3';
     import DangerButton from '@/Components/DangerButton.vue';
     import SecondaryButton from '@/Components/SecondaryButton.vue';
     import Modal from '@/Components/Modal.vue';
+    import draggable from "vuedraggable";
 
     defineProps({
         statuses : Array,
-        archive_status_id : Number
+        archive_status_id : Number,
+        fixed_status_ids : Array,
     });
 
     const showDeleteModal = ref(false);
@@ -110,10 +126,17 @@
         deletingStatus.value = null;
     }
     const deleteStatus = () => {
-        // console.log(deletingStatus.id, deletingStatus.value.id);
         router.delete(route('statuses.destroy', {status: deletingStatus.value}));
 
         showDeleteModal.value = false;
         deletingStatus.value = null;
     }
+
+    const onDragEnd = (event) => {
+        router.post(route('statuses.reorder'), {
+            id: event.moved.element.id,
+            newIndex: event.moved.newIndex,
+            oldIndex: event.moved.oldIndex,
+        });
+    };
 </script>

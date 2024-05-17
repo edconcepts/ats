@@ -28,6 +28,9 @@ Route::post('/send-notifications', [ SendNotificationController::class, 'store' 
 Route::resource('/statuses', StatusController::class)->except([
     'show',
 ])->middleware('role:admin');
+Route::as('statuses.')->prefix('statuses')->group(function () {
+    Route::post('reorder', [StatusController::class, 'reorder'])->name('reorder');
+});
 
 Route::resource('/vacancies', VacancyController::class)->only([
     'index', 'edit', 'store', 'create'

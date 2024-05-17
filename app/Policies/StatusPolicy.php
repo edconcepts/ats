@@ -27,7 +27,10 @@ class StatusPolicy
 
     public function delete(User $user, Status $status): bool
     {
-        // Cannot delete a status that is the archive status or the fixed ID from the database...
-        return $user->isAdmin && ! in_array($status->id, [config('status.archive_status_id'), 2]);
+        $fixedIds = config('status.fixed_status_ids');
+        array_unshift($fixedIds, config('status.archive_status_id'));
+
+        // Cannot delete a status that is the archive status or one of the fixed IDs...
+        return $user->isAdmin && ! in_array($status->id, $fixedIds);
     }
 }
