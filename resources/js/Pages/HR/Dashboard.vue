@@ -164,7 +164,8 @@ const searchApplications = () => {
                     <span v-if="invisibleToggled">Verberg archief</span>
                     <span v-if="! invisibleToggled">Toon archief</span>
                 </button>
-                <button @click="addCandidate" class="flex gap-4 items-center rounded bg-green-500 px-4 py-1 font-semibold text-white  shadow-sm  hover:bg-green-600">
+                <button @click="addCandidate" class="flex gap-4 items-center rounded bg-green-500 px-4 py-1 font-semibold text-white  shadow-sm  hover:bg-green-600"
+                        v-if="$page.props.auth.user.role !== 'area_manager'">
                     <PlusCircleIcon class="h-6 w-6 rounded text-white hover:text-green-600" aria-hidden="true" />
                     <span>Kandidaat toevoegen</span>
                 </button>
@@ -175,7 +176,7 @@ const searchApplications = () => {
                 <div  class="text-gray-900 bg-red-400 text-white font-bold text-lg px-4 py-3 border-b border-gray-50 flex justify-between">
                     {{ status.name }}
                     <button
-                        v-if="status.id != archived_status_id && status.candidates.length > 0"
+                        v-if="status.id != archived_status_id && status.candidates.length > 0 && $page.props.auth.user.role !== 'area_manager'"
                         class="text-center px-2 py-1" @click="archiveStatus(status)" >
                         <ArchiveBoxArrowDownIcon class="h-5 w-5 rounded text-white hover:text-red-200" aria-hidden="true" />
                     </button>
@@ -189,6 +190,7 @@ const searchApplications = () => {
                     drag-class="dragging"
                     @change="onDragEnd($event,index )"
                     class="bg-white min-h-[100px]"
+                    :disabled="$page.props.auth.user.role === 'area_manager'"
                     style="overflow-y: scroll; height:100%;"
                     ref="parent"
                 >
@@ -201,7 +203,7 @@ const searchApplications = () => {
                             left: 5px;
                             top: 50%;
                             transform: translateY(-50%);
-                        ">
+                        " v-if="$page.props.auth.user.role !== 'area_manager'">
                             <EllipsisVerticalIcon class="pointer-events-none h-full w-5 text-gray-400" aria-hidden="true" />
                         </div>
                             <div class="flex justify-between items-center space-y-1.5">

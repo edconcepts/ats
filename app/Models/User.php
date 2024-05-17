@@ -76,6 +76,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Location::class);
     }
+
     protected function isHR(): Attribute
     {
         return Attribute::make(
@@ -84,6 +85,7 @@ class User extends Authenticatable
             }
         );
     }
+
     protected function isAdmin(): Attribute
     {
         return Attribute::make(
@@ -98,6 +100,15 @@ class User extends Authenticatable
         return Attribute::make(
             get: function () {
                 return $this->role == 'store_manager';
+            }
+        );
+    }
+
+    protected function isAreaManager(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                return $this->role == 'area_manager';
             }
         );
     }

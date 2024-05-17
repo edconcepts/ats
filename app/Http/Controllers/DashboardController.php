@@ -7,14 +7,17 @@ use App\Models\Location;
 use App\Models\Status;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
     public function __invoke()
     {
+        $authUser = Auth::user();
+
         //TODO: refactor this filtering, and also maybe change dashbaords links
-        if(auth()->user()->isHR or auth()->user()->isAdmin) {
+        if($authUser->isHR || $authUser->isAdmin || $authUser->isAreaManager) {
             $statuses = Status::query()
                 ->when(request()->input('location'), function($query, $location){
                     $query->whereHas('applications', function(Builder $query) use ($location){
@@ -47,12 +50,11 @@ class DashboardController extends Controller
             return Inertia::render('HR/Dashboard', [
                 'statuses' => StatusResource::collection($statuses),
                 'locations' => Location::all(),
-                'archived_status_id' => config('status.archive_status_id')
+                'archived_status_id' => config('status.archive_status_id'),
             ]);
-        }
-        elseif (auth()->user()->isStoreManager) {
+        } elseif ($authUser->isStoreManager) {
 
-            $location = auth()->user()->location;
+            $location = $authUser->location;
 
             return Inertia::render('StoreManager/Dashboard', [
                 'location' => $location,

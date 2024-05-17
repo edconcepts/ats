@@ -23,5 +23,11 @@ class UserTableSeeder extends Seeder
             'email' => 'admin@werkenbijkik.nl',
             'role' => 'admin'
         ]);
+
+        \App\Models\User::factory()->create([
+            'name' => 'Regio manager',
+            'email' => 'regiomanager@werkenbijkik.nl',
+            'role' => 'area_manager'
+        ]);
     }
 }
