@@ -33,7 +33,7 @@
                                     </Link>
                                         <DangerButton @click="confirmDelete(status)"
                                               class="ml-4"
-                                              v-show="status.id !== archive_status_id && status.id !== 2">
+                                              v-show="status.id !== archive_status_id && ! fixed_status_ids.includes(status.id)">
                                             Verwijderen<span class="sr-only">, {{ status.name }}</span>
                                         </DangerButton>
                                     </td>
@@ -55,7 +55,7 @@
 
             <p class="mt-1 text-sm text-gray-600" v-show="deletingStatus.applications_count > 0">
                 Deze status heeft {{ deletingStatus.applications_count }} gelinkte sollicitatie(s). Bij het verwijderen
-                van deze status worden die allemaal gearchiveerd.
+                van deze status worden die allemaal verplaatst naar 'gesolliciteerd'.
             </p>
 
             <p class="mt-1 text-sm text-gray-600">
@@ -95,7 +95,8 @@
 
     defineProps({
         statuses : Array,
-        archive_status_id : Number
+        archive_status_id : Number,
+        fixed_status_ids : Array,
     });
 
     const showDeleteModal = ref(false);

@@ -23,6 +23,7 @@ class StatusController extends Controller
 
         return Inertia::render('HR/Statuses/Overview', [
             'archive_status_id' => config('status.archive_status_id'),
+            'fixed_status_ids' => config('status.fixed_status_ids'),
             'statuses' => Status::withCount('applications')->get(),
         ]);
     }
