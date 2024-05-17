@@ -21,6 +21,7 @@ return new class extends Migration
                 'vacancies', 'kik_id'
             )->cascadeOnDelete();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
