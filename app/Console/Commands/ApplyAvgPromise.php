@@ -35,6 +35,13 @@ class ApplyAvgPromise extends Command
         // Get the current date and subtract the configured count + unit.
         $date = Carbon::now()->sub($interval);
 
-        //Application::where
+        Application::withTrashed()
+            ->where(function ($query) {
+                // All archived listings regardless of whether they're soft deleted or not.
+                // All deleted listings that are not hired.
+                $query->where('status_id', config('status.archive_status_id'))
+                    ->orWhere(fn ($q) => $q->where('status_id', '!=', 9)->whereNotNull('deleted_at'));
+            })->where('created_at', '<', $date)
+            ->forceDelete();
     }
 }
