@@ -30,7 +30,7 @@
                                     item-key="id"
                                     ghost-class="ghosting"
                                     drag-class="dragging"
-                                    filter="a"
+                                    filter="a,button"
                                     @change="onDragEnd($event)"
                                     class="divide-y divide-gray-200 bg-white"
                                     tag="tbody"
@@ -44,10 +44,10 @@
                                                 <Link :href="route('statuses.edit', element)" class="text-red-600 hover:text-red-900">
                                                     Bewerken<span class="sr-only">, {{ element.name }}</span>
                                                 </Link>
-                                                <DangerButton @click="confirmDelete(status)"
+                                                <DangerButton @click="confirmDelete(element)"
                                                               class="ml-4"
-                                                              v-show="status.id !== archive_status_id && ! fixed_status_ids.includes(status.id)">
-                                                    Verwijderen<span class="sr-only">, {{ status.name }}</span>
+                                                              v-show="element.id !== archive_status_id && ! fixed_status_ids.includes(element.id)">
+                                                    Verwijderen<span class="sr-only">, {{ element.name }}</span>
                                                 </DangerButton>
                                             </td>
                                         </tr>
