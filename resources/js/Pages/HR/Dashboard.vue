@@ -130,8 +130,6 @@ const searchApplications = () => {
 <template>
     <Head title="Dashboard" />
 
-
-
     <Layout>
 <!--         <pre>-->
 <!--        {{ statuses }}-->
@@ -139,7 +137,6 @@ const searchApplications = () => {
         <div class="mb-8 top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 pr-2 shadow-sm sm:gap-x-6" style="
     width: 100%;
     flex-wrap: wrap;height: fit-content;">
-
             <!-- Separator -->
             <!--<div class="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />-->
             <select @change="searchApplications" id="location" name="location" v-model="location" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
@@ -196,14 +193,14 @@ const searchApplications = () => {
                         <div v-if="element.visible" @tap="showApplication(element)" @click="showApplication(element)" class="p-3 pl-8 border-b last-of-type:border-0 relative"
                             :class="element"
                         >
-                        <div class="handle" style="
-                            position: absolute;
-                            left: 5px;
-                            top: 50%;
-                            transform: translateY(-50%);
-                        ">
-                            <EllipsisVerticalIcon class="pointer-events-none h-full w-5 text-gray-400" aria-hidden="true" />
-                        </div>
+                            <div class="handle" style="
+                                position: absolute;
+                                left: 5px;
+                                top: 50%;
+                                transform: translateY(-50%);
+                            ">
+                                <EllipsisVerticalIcon class="pointer-events-none h-full w-5 text-gray-400" aria-hidden="true" />
+                            </div>
                             <div class="flex justify-between items-center space-y-1.5">
                                 <span class="font-semibold">{{ element.name }}</span>
                                 <span class="text-gray-400 text-sm" style="white-space: nowrap;">{{ element.date }}</span>
