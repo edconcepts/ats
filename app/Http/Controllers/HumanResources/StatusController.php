@@ -79,7 +79,7 @@ class StatusController extends Controller
                 ]
             );
         } else {
-            $status->email()?->delete();
+            $status->email()->delete();
         }
 
         return redirect()->route('statuses.index');
