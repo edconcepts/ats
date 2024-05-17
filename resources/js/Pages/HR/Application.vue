@@ -1,5 +1,3 @@
-
-
 <template>
     <TransitionRoot appear as="template" :show="show">
         <Dialog as="div" class="relative z-50" @close="close">
@@ -29,13 +27,15 @@
                             <div>
                                 <div class="px-4 sm:px-0 flex items-center justify-between">
                                     <h3 class="text-base font-semibold leading-7 text-gray-900">Sollicitatie details</h3>
-                                    <div class="flex">
-                                        <button style="margin-right: 15px;"  v-if="user.role !== 'store_manager'" @click="archive(application)" type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3  gap-x-1.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto">
+                                    <div class="flex space-x-2">
+                                        <DangerButton @click="confirmDelete()" class="">
+                                            Verwijderen<span class="sr-only">, {{ application.name }}</span>
+                                        </DangerButton>
+                                        <button v-if="user.role !== 'store_manager'" @click="archive(application)" type="button" class="inline-flex w-full justify-center rounded-md bg-red-600 px-3  gap-x-1.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto">
                                             Archiveren
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="-mr-0.5 h-5 w-5">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
                                             </svg>
-
                                         </button>
                                         <button  @click="close(application)" type="button" class="close inline-flex justify-center rounded-md bg-red-600 px-3  gap-x-1.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto">
                                             X
@@ -156,6 +156,30 @@
                                         <textarea  rows="4" name="comment" v-model="notes" @input="onInput" id="comment" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">{{ notes }}</textarea>
                                     </div>
                                 </div>
+
+                                <Modal :show="showDeleteModal" @close="closeModal">
+                                    <div class="p-6">
+                                        <h2 class="text-lg font-medium text-gray-900">
+                                            Weet je zeker dat je de sollicitatie '{{ application.name }}' wilt verwijderen?
+                                        </h2>
+
+                                        <p class="mt-1 text-sm text-gray-600">
+                                            De sollicitatie wordt daarmee gesloten. Eventuele geplande interviews worden
+                                            geannuleerd.
+                                        </p>
+
+                                        <div class="mt-6 flex justify-end">
+                                            <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+
+                                            <DangerButton
+                                                class="ml-3"
+                                                @click="deleteApplication"
+                                            >
+                                                Verwijderen
+                                            </DangerButton>
+                                        </div>
+                                    </div>
+                                </Modal>
                             </div>
                         </DialogPanel>
                     </TransitionChild>
@@ -174,11 +198,14 @@
 </style>
 
 <script setup>
-    import {TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle} from "@headlessui/vue"
+    import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from "@headlessui/vue"
     import {router, useForm, usePage} from "@inertiajs/vue3";
-    import {useModal} from "momentum-modal"
+    import { useModal } from "momentum-modal"
     import {computed, onMounted, ref} from "vue";
     import debounce from "lodash/debounce";
+    import DangerButton from "@/Components/DangerButton.vue";
+    import SecondaryButton from "@/Components/SecondaryButton.vue";
+    import Modal from '@/Components/Modal.vue';
 
     const props = defineProps({
         application: Object,
@@ -186,7 +213,7 @@
         interviewTimeSlot: Object
     })
 
-    const {show, close, redirect} = useModal()
+    const { show, close, redirect } = useModal()
 
     const statusForm = useForm({
         status: props.application?.status?.id
@@ -231,4 +258,17 @@
             notes: notes.value
         })
     }, 500)
+
+    const showDeleteModal = ref(false);
+
+    const confirmDelete = () => {
+        showDeleteModal.value = true;
+    }
+    const closeModal = () => {
+        showDeleteModal.value = false;
+    }
+    const deleteApplication = () => {
+        router.delete(route('applications.destroy', props.application));
+        showDeleteModal.value = false;
+    }
 </script>
