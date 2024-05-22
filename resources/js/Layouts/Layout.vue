@@ -1,4 +1,5 @@
 <template>
+    <Modal />
     <div>
 <TransitionRoot as="template" :show="sidebarOpen">
     <Dialog as="div" class="relative z-50 lg:hidden" @close="sidebarOpen = false">
@@ -20,13 +21,13 @@
                     <!-- Sidebar component, swap this element with another sidebar if you like -->
                     <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-2">
                         <div class="flex h-16 shrink-0 items-center">
-                            <img class="h-8 w-auto" src="http://staging.werkenbijkik.nl/wp-content/uploads/2023/03/KiK_Logo_3D_4c.svg" alt="Your Company" />
+                            <img class="h-8 w-auto" src="/KiK_Logo_3D_4c.svg" alt="Kik" />
                         </div>
                         <nav class="flex flex-1 flex-col">
                             <ul role="list" class="flex flex-1 flex-col gap-y-7">
                                 <li>
                                     <ul role="list" class="-mx-2 space-y-1">
-                                        <li v-for="item in navigation" :key="item.name">
+                                        <li v-for="item in navigation[$page.props.auth.user.role]" :key="item.name">
                                             <a :href="item.href" :class="[item.current ? 'bg-gray-50 text-red-600' : 'text-gray-700 hover:text-red-600 hover:bg-gray-50', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
                                                 <component :is="item.icon" :class="[item.current ? 'text-red-600' : 'text-gray-400 group-hover:text-red-600', 'h-6 w-6 shrink-0']" aria-hidden="true" />
                                                 {{ item.name }}
@@ -48,17 +49,20 @@
     <!-- Sidebar component, swap this element with another sidebar if you like -->
     <div class="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
         <div class="flex h-24 shrink-0 items-center">
-            <img class="h-16 w-auto" src="http://staging.werkenbijkik.nl/wp-content/uploads/2023/03/KiK_Logo_3D_4c.svg" alt="Your Company" />
+            <img class="h-16 w-auto" src="/KiK_Logo_3D_4c.svg" alt="Kik" />
         </div>
         <nav class="flex flex-1 flex-col">
             <ul role="list" class="flex flex-1 flex-col gap-y-7">
                 <li>
                     <ul role="list" class="-mx-2 space-y-1">
-                        <li v-for="item in navigation" :key="item.name">
-                            <a :href="item.href" :class="[item.current ? 'bg-gray-50 text-red-600' : 'text-gray-700 hover:text-red-600 hover:bg-gray-50', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']">
+                        <li v-for="item in navigation[$page.props.auth.user.role]" :key="item.name">
+                            <Link
+                                :href="item.href"
+                                :class="[item.current ? 'bg-gray-50 text-red-600' : 'text-gray-700 hover:text-red-600 hover:bg-gray-50', 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold']"
+                                :method="item.method ? item.method : 'get'">
                                 <component :is="item.icon" :class="[item.current ? 'text-red-600' : 'text-gray-400 group-hover:text-red-600', 'h-6 w-6 shrink-0']" aria-hidden="true" />
                                 {{ item.name }}
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </li>
@@ -80,8 +84,8 @@
     </a>
 </div>
 
-<main class="py-10 lg:pl-72 ">
-    <div class="px-4 sm:px-6 lg:px-8">
+<main class="py-10 lg:pl-72 " style="height: 100vh;">
+    <div class="px-4 sm:px-6 lg:px-8 h-full">
         <slot />
     </div>
 </main>
@@ -90,6 +94,8 @@
 
 <script setup>
 import { ref } from 'vue'
+import {Link, usePage} from '@inertiajs/vue3';
+import { Modal } from "momentum-modal";
 import { Dialog, DialogPanel, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import {
     ArrowLeftOnRectangleIcon,
@@ -103,14 +109,34 @@ import {
     TagIcon,
     MapPinIcon,
     XMarkIcon,
+    PencilSquareIcon, BriefcaseIcon,
 } from '@heroicons/vue/24/outline'
 
-const navigation = [
-    { name: 'Dashboard', href: route('hr.dashboard'), icon: HomeIcon, current: route().current('hr.dashboard') },
-    { name: 'Locaties', href: route('hr.locations'), icon: MapPinIcon, current: route().current('hr.locations') },
-    { name: 'Statussen', href: route('hr.statuses'), icon: TagIcon, current: route().current('hr.statuses*') },
-    { name: 'Uitloggen', href: '#', icon: ArrowLeftOnRectangleIcon, current: false },
-]
+// if (usePage().props.user)
+
+const navigation =
+    {
+        hr: [
+            { name: 'Dashboard', href: route('dashboard'), icon: HomeIcon, current: route().current('dashboard.index'), method:false },
+            { name: 'Uitloggen', href: route('logout'), icon: ArrowLeftOnRectangleIcon, current: false, method: 'post' },
+        ],
+        admin: [
+            { name: 'Dashboard', href: route('dashboard'), icon: HomeIcon, current: route().current('dashboard.index'), method:false },
+            { name: 'Filialen', href: route('locations.index'), icon: MapPinIcon, current: route().current('locations.index'), method:false },
+            { name: 'Statussen', href: route('statuses.index'), icon: TagIcon, current: route().current('statuses*'), method:false },
+            { name: 'Vacatures', href: route('vacancies.index'), icon: BriefcaseIcon, current: route().current('vacancies*'), method:false },
+            { name: 'Verstuur melding', href: route('notification-send.index'), icon: PencilSquareIcon, current: route().current('notification-send.index'), method:false },
+
+            { name: 'Uitloggen', href: route('logout'), icon: ArrowLeftOnRectangleIcon, current: false, method: 'post' },
+        ],
+        store_manager: [
+            { name: 'Dashboard', href: route('dashboard'), icon: HomeIcon, current: route().current('dashboard.index'), method:false },
+            { name: 'Uitloggen', href: route('logout'), icon: ArrowLeftOnRectangleIcon, current: false, method: 'post' },
+        ]
+    }
+
+
+console.log(navigation)
 
 const sidebarOpen = ref(false)
 </script>

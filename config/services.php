@@ -31,4 +31,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'wordpress' => [
+        'base_url' => env('WORDPRESS_API_URL'),
+        'user' => env('WORDPRESS_API_USER'),
+        'pass' => env('WORDPRESS_API_PASSWORD'),
+    ],
+
 ];

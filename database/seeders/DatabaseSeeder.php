@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,11 +13,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call([
+            UserTableSeeder::class,
+            StatusTableSeeder::class,
+//            StoreManagerTimeSlotTableSeeder::class
+        ]);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        Artisan::call('import:all');
+
+//        \App\Models\Location::factory()->count(3)->create();
+//        \App\Models\Vacancy::factory()->count(3)->create();
+//        \App\Models\Application::factory()->count(10)->create();
+//        \App\Models\StatusEmail::factory()->count(3)->create();
     }
+
+
 }

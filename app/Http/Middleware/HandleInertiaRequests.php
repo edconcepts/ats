@@ -33,12 +33,16 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
+                'notification_count' => $request->user()?->unreadNotifications()->count() ?? 0,
             ],
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy)->toArray(), [
                     'location' => $request->url(),
                 ]);
             },
+            'flash' => [
+                'success' => fn () => $request->session()->get('success')
+            ],
         ]);
     }
 }
