@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HumanResources\ApplicationArchiveController;
+use App\Http\Controllers\HumanResources\ApplicationController;
 use App\Http\Controllers\HumanResources\ApplicationInterviewController;
 use App\Http\Controllers\HumanResources\ApplicationStatusController;
 use App\Http\Controllers\HumanResources\ArchiveStatusApplicationController;
@@ -24,9 +25,12 @@ Route::post('/dashboard/create_application', [DashboardController::class, 'store
 Route::get('/send-notifications', [ SendNotificationController::class, 'index' ])->name('notification-send.index');
 Route::post('/send-notifications', [ SendNotificationController::class, 'store' ])->name('notification-send.store');
 
-Route::resource('/statuses', StatusController::class)->only([
-    'index', 'store' , 'create', 'edit', 'update'
+Route::resource('/statuses', StatusController::class)->except([
+    'show',
 ])->middleware('role:admin');
+Route::as('statuses.')->prefix('statuses')->group(function () {
+    Route::post('reorder', [StatusController::class, 'reorder'])->name('reorder');
+});
 
 Route::resource('/vacancies', VacancyController::class)->only([
     'index', 'edit', 'store', 'create'
@@ -38,9 +42,17 @@ Route::post('/vacancies/{vacancy}', [VacancyController::class, 'update'])->name(
 
 Route::post('/statuses/{status}/applications/archive', ArchiveStatusApplicationController::class)->name('statuses.applications.archive');
 
-Route::put('/applications/{application}/status', [ApplicationStatusController::class, 'update'])->name('applications.status.update');
-Route::post('/applications/{application}/interviews', [ApplicationInterviewController::class, 'store'])->name('applications.interviews.store');
-Route::put('/applications/{application}/archive', [ApplicationArchiveController::class, 'update'])->name('applications.archive.update');
+Route::as('applications.')->prefix('applications/{application}')->group(function () {
+    Route::delete('', [ApplicationController::class, 'destroy'])->name('destroy');
+
+    Route::put('status', [ApplicationStatusController::class, 'update'])->name('status.update');
+    Route::put('archive', [ApplicationArchiveController::class, 'update'])->name('archive.update');
+
+    Route::as('interviews.')->prefix('interviews')->group(function () {
+        Route::post('', [ApplicationInterviewController::class, 'store'])->name('store');
+        Route::post('cancel', [ApplicationInterviewController::class, 'cancel'])->name('cancel');
+    });
+});
 
 Route::resource('/locations' , LocationController::class)
     ->only(['index', 'edit', 'update'])->middleware('role:admin');

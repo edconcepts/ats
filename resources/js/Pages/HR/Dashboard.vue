@@ -1,10 +1,10 @@
 <script setup>
 import Layout from '@/Layouts/Layout.vue';
-import { Head, router } from '@inertiajs/vue3';
+import {Head, router, usePage} from '@inertiajs/vue3';
 
 import { MagnifyingGlassIcon, ArchiveBoxArrowDownIcon, PlusCircleIcon, EllipsisVerticalIcon } from "@heroicons/vue/24/outline";
 import draggable from "vuedraggable/src/vuedraggable";
-import {onMounted, ref, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import {useAutoAnimate} from "@formkit/auto-animate/vue";
 import autoAnimate from "@formkit/auto-animate";
 import debounce from 'lodash/debounce';
@@ -22,6 +22,8 @@ const changes = ref({
     newStatus: null,
     element: null,
 });
+
+const user = computed(() => usePage().props.auth.user)
 
 const onDragEnd = (event, statusIndex) => {
     if (event.added) {
@@ -130,8 +132,6 @@ const searchApplications = () => {
 <template>
     <Head title="Dashboard" />
 
-
-
     <Layout>
 <!--         <pre>-->
 <!--        {{ statuses }}-->
@@ -139,7 +139,6 @@ const searchApplications = () => {
         <div class="mb-8 top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 pr-2 shadow-sm sm:gap-x-6" style="
     width: 100%;
     flex-wrap: wrap;height: fit-content;">
-
             <!-- Separator -->
             <!--<div class="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true" />-->
             <select @change="searchApplications" id="location" name="location" v-model="location" class="rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
@@ -164,7 +163,8 @@ const searchApplications = () => {
                     <span v-if="invisibleToggled">Verberg archief</span>
                     <span v-if="! invisibleToggled">Toon archief</span>
                 </button>
-                <button @click="addCandidate" class="flex gap-4 items-center rounded bg-green-500 px-4 py-1 font-semibold text-white  shadow-sm  hover:bg-green-600">
+                <button @click="addCandidate" class="flex gap-4 items-center rounded bg-green-500 px-4 py-1 font-semibold text-white  shadow-sm  hover:bg-green-600"
+                        v-if="user.role !== 'area_manager'">
                     <PlusCircleIcon class="h-6 w-6 rounded text-white hover:text-green-600" aria-hidden="true" />
                     <span>Kandidaat toevoegen</span>
                 </button>
@@ -175,7 +175,7 @@ const searchApplications = () => {
                 <div  class="text-gray-900 bg-red-400 text-white font-bold text-lg px-4 py-3 border-b border-gray-50 flex justify-between">
                     {{ status.name }}
                     <button
-                        v-if="status.id != archived_status_id && status.candidates.length > 0"
+                        v-if="status.id != archived_status_id && status.candidates.length > 0 && user.role !== 'area_manager'"
                         class="text-center px-2 py-1" @click="archiveStatus(status)" >
                         <ArchiveBoxArrowDownIcon class="h-5 w-5 rounded text-white hover:text-red-200" aria-hidden="true" />
                     </button>
@@ -189,6 +189,7 @@ const searchApplications = () => {
                     drag-class="dragging"
                     @change="onDragEnd($event,index )"
                     class="bg-white min-h-[100px]"
+                    :disabled="user.role === 'area_manager'"
                     style="overflow-y: scroll; height:100%;"
                     ref="parent"
                 >
@@ -196,14 +197,14 @@ const searchApplications = () => {
                         <div v-if="element.visible" @tap="showApplication(element)" @click="showApplication(element)" class="p-3 pl-8 border-b last-of-type:border-0 relative"
                             :class="element"
                         >
-                        <div class="handle" style="
-                            position: absolute;
-                            left: 5px;
-                            top: 50%;
-                            transform: translateY(-50%);
-                        ">
-                            <EllipsisVerticalIcon class="pointer-events-none h-full w-5 text-gray-400" aria-hidden="true" />
-                        </div>
+                            <div class="handle" style="
+                                position: absolute;
+                                left: 5px;
+                                top: 50%;
+                                transform: translateY(-50%);
+                            " v-if="user.role !== 'area_manager'">
+                                <EllipsisVerticalIcon class="pointer-events-none h-full w-5 text-gray-400" aria-hidden="true" />
+                            </div>
                             <div class="flex justify-between items-center space-y-1.5">
                                 <span class="font-semibold">{{ element.name }}</span>
                                 <span class="text-gray-400 text-sm" style="white-space: nowrap;">{{ element.date }}</span>

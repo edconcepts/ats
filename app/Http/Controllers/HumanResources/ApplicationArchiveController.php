@@ -10,6 +10,8 @@ class ApplicationArchiveController extends Controller
 {
     public function update(Application $application)
     {
+        $this->authorize('archive', $application);
+
         $application->update(['status_id' => config('status.archive_status_id')]);
 
         return redirect(route('dashboard'));
