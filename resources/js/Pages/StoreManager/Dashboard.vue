@@ -7,7 +7,7 @@ defineProps({
 })
 import {MagnifyingGlassIcon, ArchiveBoxArrowDownIcon, ArrowLeftOnRectangleIcon} from "@heroicons/vue/24/outline";
 import draggable from "vuedraggable/src/vuedraggable";
-import {onMounted, ref} from "vue";
+import {nextTick, onBeforeUpdate, onMounted, onUpdated, ref} from "vue";
 import StoreManagerLayout from "@/Layouts/StoreManagerLayout.vue";
 
 const saveTimeSlot = (timeslot) => {
@@ -24,6 +24,8 @@ const showApplication = (application) => {
     router.visit(route('dashboard.application.show',application));
 };
 
+let scrollTop = 0;
+
 onMounted(() => {
     // setInterval(() => {
     //     fetch(route('store-manager.notifications.count'))
@@ -32,8 +34,19 @@ onMounted(() => {
     //             usePage().props.auth.notification_count = data
     //         })
     // }, 5000)
-})
+});
 
+// Detect current scrollTop
+onBeforeUpdate(() => {
+    scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+});
+
+// Move scroll back
+onUpdated(() => {
+    nextTick(() => {
+        window.scrollTo(0, scrollTop);
+    });
+});
 </script>
 
 <template>
@@ -74,7 +87,7 @@ onMounted(() => {
             </button>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-7 w-full mt-4 gap-4">
-            <div v-for="day in days">
+            <div v-for="day in days" :key="day.formatted">
                 <div class="text-gray-900 bg-red-400 text-white truncate font-bold text-lg px-4 py-3 border-b border-gray-50">{{ day.localized }}</div>
                 <template v-for="timeslot in day.timeslots">
                     <div v-if="timeslot.appointment" class="bg-green-200 py-2 px-4" @click="showApplication(timeslot.appointment)">
