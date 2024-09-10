@@ -4,7 +4,7 @@ import {Head, router, usePage} from '@inertiajs/vue3';
 
 import { MagnifyingGlassIcon, ArchiveBoxArrowDownIcon, PlusCircleIcon, EllipsisVerticalIcon } from "@heroicons/vue/24/outline";
 import draggable from "vuedraggable/src/vuedraggable";
-import {computed, onMounted, ref, watch} from "vue";
+import {computed, onMounted, onUpdated, ref, watch} from "vue";
 import {useAutoAnimate} from "@formkit/auto-animate/vue";
 import autoAnimate from "@formkit/auto-animate";
 import debounce from 'lodash/debounce';
@@ -91,42 +91,50 @@ const toggleVisible = () =>{
     // props.statuses.forEach((item, index) => {
     //     item.visible = true;
     // })
-    invisibleToggled.value = !invisibleToggled.value;
+    invisibleToggled.value = ! invisibleToggled.value;
 }
 
-let search = ref('');
-let location = ref('');
+let search = ref(sessionStorage.getItem('dashboardSearch') || '');
+let location = ref(sessionStorage.getItem('dashboardLocation') || '');
 
-watch(search, debounce(function(value){
+watch(search, debounce(function(value) {
   searchApplications()
 },300));
 
 const searchApplications = () => {
-    console.log(search.value, location.value)
+    // console.log(search.value, location.value);
+    // Save filters in local storage.
+    sessionStorage.setItem('dashboardSearch', search.value);
+    sessionStorage.setItem('dashboardLocation', location.value);
+
+    filterCandidates();
+}
+
+const filterCandidates = () => {
+    let nameSearch = search.value.toLowerCase();
+    let locationSearch = location.value.toLowerCase();
+    // console.log(nameSearch, locationSearch);
     props.statuses.forEach((item, index) => {
         item.candidates.forEach((candidate, index) => {
-            if (
-                (
-                    candidate.name.toLowerCase().includes(search.value.toLowerCase()) &&
-                    search.value.toLowerCase() !== ''
-                ) ||
-                (
-                    candidate.location_name.toLowerCase().includes(location.value.toLowerCase()) &&
-                    location.value.toLowerCase() !== ''
-                )
-            ) {
+            if (nameSearch === '' && locationSearch === '') {
                 candidate.visible = true;
             } else {
-                candidate.visible = false;
-            }
-
-            if (search.value.toLowerCase() === '' && location.value.toLowerCase() === '') {
-                candidate.visible = true;
+                let visible = true;
+                if (! candidate.location_name.toLowerCase().includes(locationSearch)) {
+                    visible = false;
+                }
+                if (! candidate.name.toLowerCase().includes(nameSearch)) {
+                    visible = false;
+                }
+                candidate.visible = visible;
             }
         });
     });
 }
 
+// Apply filtering on mount (loading component) and update (component updates)
+onUpdated(filterCandidates);
+onMounted(filterCandidates);
 </script>
 
 <template>
@@ -194,10 +202,10 @@ const searchApplications = () => {
                     ref="parent"
                 >
                     <template #item="{ element, index }">
-                        <div v-if="element.visible" @tap="showApplication(element)" @click="showApplication(element)" class="p-3 pl-8 border-b last-of-type:border-0 relative"
+                        <div v-if="element.visible" @tap="showApplication(element)" @click="showApplication(element)" class="p-3 pl-8 border-b last-of-type:border-0 relative cursor-pointer"
                             :class="element"
                         >
-                            <div class="handle" style="
+                            <div class="handle cursor-move" style="
                                 position: absolute;
                                 left: 5px;
                                 top: 50%;
