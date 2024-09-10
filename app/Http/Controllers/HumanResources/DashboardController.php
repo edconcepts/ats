@@ -9,6 +9,7 @@ use App\Models\Application;
 use App\Models\Status;
 use App\Models\Vacancy;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 
@@ -49,6 +50,7 @@ class DashboardController extends Controller
     public function add_application()
     {
         return Inertia::modal('HR/AddApplication', [
+            'defaultStatusId' => Arr::first(Arr::wrap(config('status.fixed_status_ids'))),
             'statuses' => Status::all(),
             'vacancies' => Vacancy::with('location')->get(),
         ])->baseRoute('dashboard');

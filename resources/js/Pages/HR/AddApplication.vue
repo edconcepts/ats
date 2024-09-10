@@ -9,7 +9,8 @@ const props = defineProps({
     application: Object,
     statuses: Object,
     vacancies: Object,
-    interviewTimeSlot: Object
+    interviewTimeSlot: Object,
+    defaultStatusId: Number,
 })
 
 const { show, close, redirect } = useModal()
@@ -17,9 +18,9 @@ const { show, close, redirect } = useModal()
 const application = useForm({
     name: null,
     email: null,
-    phone_number: null,
+    phone_number: '+316',
     vacancy_id: null,
-    status_id: null,
+    status_id: props.defaultStatusId,
     cv: null,
     notes: null
 });
