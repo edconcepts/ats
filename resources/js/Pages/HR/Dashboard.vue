@@ -144,8 +144,6 @@ onMounted(() => {
     nextTick(() => {
         statusList.value.scrollTo(scrollLeft, 0);
     });
-
-    console.log("Previous route path:", previousRoutePath.value);
 });
 
 // Detect current scroll left before unmounting the component.
