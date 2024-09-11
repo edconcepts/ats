@@ -4,7 +4,7 @@ import {Head, router, usePage} from '@inertiajs/vue3';
 
 import { MagnifyingGlassIcon, ArchiveBoxArrowDownIcon, PlusCircleIcon, EllipsisVerticalIcon } from "@heroicons/vue/24/outline";
 import draggable from "vuedraggable/src/vuedraggable";
-import {computed, onMounted, onUpdated, ref, watch} from "vue";
+import {computed, nextTick, onBeforeUnmount, onBeforeUpdate, onMounted, onUpdated, ref, watch} from "vue";
 import {useAutoAnimate} from "@formkit/auto-animate/vue";
 import autoAnimate from "@formkit/auto-animate";
 import debounce from 'lodash/debounce';
@@ -132,9 +132,32 @@ const filterCandidates = () => {
     });
 }
 
-// Apply filtering on mount (loading component) and update (component updates)
-onUpdated(filterCandidates);
-onMounted(filterCandidates);
+// Get reference to the element.
+const statusList = ref(null);
+let scrollLeft = sessionStorage.getItem('statusListScrollLeft') || 0;
+
+onMounted(() => {
+    // Apply filtering on mount (loading component);
+    filterCandidates();
+
+    // Reapply scroll left when component is mounted.
+    nextTick(() => {
+        statusList.value.scrollTo(scrollLeft, 0);
+    });
+
+    console.log("Previous route path:", previousRoutePath.value);
+});
+
+// Detect current scroll left before unmounting the component.
+onBeforeUnmount(() => {
+    scrollLeft = statusList.value.scrollLeft;
+    sessionStorage.setItem('statusListScrollLeft', scrollLeft);
+});
+
+onUpdated(() => {
+    // Apply filtering on update (component updates)
+    filterCandidates();
+});
 </script>
 
 <template>
@@ -178,7 +201,7 @@ onMounted(filterCandidates);
                 </button>
             </div>
         </div>
-        <div class="flex gap-8 pb-8" style="overflow: scroll hidden;">
+        <div class="flex gap-8 pb-8" style="overflow: scroll hidden;" ref="statusList">
             <div v-for="(status, index) in statuses" v-show="status.visible == true || invisibleToggled" class="bg-white shadow-sm basis-80 flex-shrink-0 mb-8" style="height: 75vh;">
                 <div  class="text-gray-900 bg-red-400 text-white font-bold text-lg px-4 py-3 border-b border-gray-50 flex justify-between">
                     {{ status.name }}
