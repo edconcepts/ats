@@ -93,13 +93,16 @@ const submit = () => {
                                             <div class="px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                                 <dt class="text-sm font-medium leading-6 text-gray-900">Status</dt>
                                                 <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                                    <select
-                                                        class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                        v-model="application.status_id" >
-                                                        <option v-for="status in statuses" :value="status.id">
-                                                            {{ status.name }}
-                                                        </option>
-                                                    </select>
+                                                    <v-select v-model="application.status_id"
+                                                              label="name"
+                                                              :reduce="status => status.id"
+                                                              :options="statuses">
+                                                        <template v-slot:no-options="{ search, searching }">
+                                                            <template v-if="searching">
+                                                                Geen status gevonden voor <em>{{ search }}</em>.
+                                                            </template>
+                                                        </template>
+                                                    </v-select>
                                                 </dd>
                                             </div>
                                             <div class="px-4 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">

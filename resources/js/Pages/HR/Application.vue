@@ -151,7 +151,7 @@
                                                             :value="interviewTimeSlot.id">
                                                         {{ interviewTimeSlot.start }}
                                                     </option>
-                                                    <template v-for="timeSlot in locations[timeSlotForm.location].manager.available_time_slots">
+                                                    <template v-for="timeSlot in locations[timeSlotForm.location].manager?.available_time_slots">
                                                         <option v-if="! interviewTimeSlot || interviewTimeSlot.id !== timeSlot.id"
                                                                 :value="timeSlot.id">
                                                             {{ timeSlot.start }}

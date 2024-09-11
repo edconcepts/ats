@@ -40,6 +40,11 @@ class DashboardController extends Controller
             'status'
         ]);
 
+        // Ensure we add the location for the current application if it doesn't have slots, just so it's not confusing.
+        if (! $locations->has($application->vacancy->location_id)) {
+            $locations[$application->vacancy->location->id] = $application->vacancy->location;
+        }
+
         return Inertia::modal('HR/Application', [
             'locations' => $locations,
             'application' => $application,
