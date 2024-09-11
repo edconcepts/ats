@@ -19,9 +19,11 @@ class ApplicationInterviewController extends Controller
                 'application_id' => $application->id
             ],
             [
-                'store_manager_time_slot_id' => $request->timeSlot,
+                'store_manager_time_slot_id' => $request->validated('timeSlot'),
             ]
         );
+        // Re-load potentially eager loaded (null) interview.
+        $application->load('interview');
 
         // TODO: Perhaps not hardcoded ID?
         // Set status to "Gesprek ingepland"
@@ -29,6 +31,7 @@ class ApplicationInterviewController extends Controller
         $application->save();
 
         try {
+            // TODO: Should we notify the manager of the interview location?
             $application->vacancy->location->manager->notify(new InterviewScheduledNotification($application));
         } catch (\RuntimeException $e) {
             // Credentials not set. Probably local environment.

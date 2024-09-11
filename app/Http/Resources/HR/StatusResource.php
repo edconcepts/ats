@@ -25,6 +25,8 @@ class StatusResource extends JsonResource
                 'date' => $application->kik_date->format('d-m-Y'),
                 'job' => $application->vacancy?->title,
                 'location_name' => $application->vacancy?->location->name,
+                'interview_date' => $application->interview?->storeManagerTimeSlot->start,
+                'interview_location' => $application->interview?->storeManagerTimeSlot->storeManager->location->name,
                 'visible' => true,
             ];
 

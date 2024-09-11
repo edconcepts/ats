@@ -16,8 +16,8 @@ class DashboardController extends Controller
     {
         $authUser = Auth::user();
 
-        //TODO: refactor this filtering, and also maybe change dashbaords links
-        if($authUser->isHR || $authUser->isAdmin || $authUser->isAreaManager) {
+        //TODO: refactor this filtering, and also maybe change dashboard links
+        if ($authUser->isHR || $authUser->isAdmin || $authUser->isAreaManager) {
             $statuses = Status::query()
                 ->when(request()->input('location'), function($query, $location){
                     $query->whereHas('applications', function(Builder $query) use ($location){
@@ -43,7 +43,7 @@ class DashboardController extends Controller
                             });
                     })->oldest();
                 })
-                ->with('applications', 'applications.vacancy', 'applications.vacancy.location')->get();
+                ->with('applications.vacancy.location', 'applications.interview.storeManagerTimeSlot.storeManager.location')->get();
 
             ray($statuses);
 

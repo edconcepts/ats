@@ -120,7 +120,8 @@ const filterCandidates = () => {
                 candidate.visible = true;
             } else {
                 let visible = true;
-                if (! candidate.location_name.toLowerCase().includes(locationSearch)) {
+
+                if (! candidate.location_name.toLowerCase().includes(locationSearch) && (! candidate.interview_location || ! candidate.interview_location.toLowerCase().includes(locationSearch))) {
                     visible = false;
                 }
                 if (! candidate.name.toLowerCase().includes(nameSearch)) {
@@ -241,7 +242,7 @@ onUpdated(() => {
                             <div class="flex flex-col justify-between">
                                 <span class="text-gray-400 text-sm" v-html="element.job"></span>
                                 <span class="text-sm" v-html="element.location_name"></span>
-
+                                <span class="text-sm" v-if="element.interview_location" v-html="element.interview_location + ' - ' + element.interview_date"></span>
                             </div>
                         </div>
                     </template>
