@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Contracts\Importable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -21,7 +20,7 @@ class Location extends Model implements Importable
         return $this->hasMany(Vacancy::class, 'location_id','kik_id');
     }
 
-    public function applications()
+    public function applications(): HasManyThrough
     {
         return $this->throughVacancies()->hasApplications();
     }

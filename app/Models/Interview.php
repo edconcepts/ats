@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Interview extends Model
 {
@@ -13,21 +14,22 @@ class Interview extends Model
     protected $guarded = [];
 
     //relationships
-    public function storeManagerTimeSlot()
+    public function storeManagerTimeSlot(): BelongsTo
     {
         return $this->belongsTo(StoreManagerTimeSlot::class);
     }
 
-    public function application()
+    public function application(): BelongsTo
     {
         return $this->belongsTo(Application::class);
     }
 
     //scopes
-    public function scopeEnded(Builder $query)
+    public function scopeEnded(Builder $query): Builder
     {
-        $query->whereHas('StoreManagerTimeSlot', function($query){
-            return $query->where('start' , '<' , now()->subHour());
-        });
+        return $query->whereHas(
+            'StoreManagerTimeSlot',
+            fn ($query) => $query->where('start' , '<' , now()->subHour())
+        );
     }
 }

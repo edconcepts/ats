@@ -6,6 +6,8 @@ use App\Contracts\Importable;
 use App\Helpers\FormatHelper;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
@@ -25,17 +27,17 @@ class Application extends Model implements Importable
     ];
 
     // Relationships
-    public function vacancy()
+    public function vacancy(): BelongsTo
     {
         return $this->belongsTo(Vacancy::class, 'vacancy_id', 'kik_id');
     }
 
-    public function status()
+    public function status(): BelongsTo
     {
         return $this->belongsTo(Status::class);
     }
 
-    public function interview()
+    public function interview(): HasOne
     {
         return $this->hasOne(Interview::class);
     }

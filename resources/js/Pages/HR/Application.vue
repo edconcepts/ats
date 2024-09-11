@@ -100,10 +100,12 @@
                                         </dl>
                                         <div class="w-64 py-4 shrink-0">
                                             <div class="flex flex-col gap-2" v-if="user.role !== 'area_manager'">
-                                                <label for="location" class="block text-sm font-medium leading-6 text-gray-900">Status wijzigen</label>
-                                                <select
-                                                    class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                    v-model="statusForm.status" >
+                                                <label for="status" class="block text-sm font-medium leading-6 text-gray-900">
+                                                    Status wijzigen
+                                                </label>
+                                                <select id="status"
+                                                        class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                        v-model="statusForm.status">
                                                     <option v-for="status in statuses" :value="status.id">
                                                         {{ status.name }}
                                                     </option>
@@ -117,21 +119,44 @@
                                             </div>
 
                                             <div class="flex flex-col gap-2 mt-4 pt-4 border-t" v-if="user.role !== 'store_manager' && user.role !== 'area_manager'">
-                                                <label for="location" class="block text-sm font-medium leading-6 text-gray-900">Gesprek inplannen</label>
+                                                <label for="plan" class="block text-sm font-medium leading-6 text-gray-900">
+                                                    Gesprek inplannen
+                                                </label>
 
-                                                <select
-                                                    class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                    v-model="timeSlotForm.timeSlot" >
-                                                    <option
-                                                        v-if="interviewTimeSlot"
-                                                        :value="interviewTimeSlot.id">
+                                                <label for="location" class="block text-xs font-medium leading-6 text-gray-900">
+                                                    Filiaal
+                                                </label>
+                                                <select id="location"
+                                                        class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                        v-model="timeSlotForm.location">
+                                                    <option v-if="interviewTimeSlot"
+                                                            :value="interviewTimeSlot.store_manager.location.id">
+                                                        {{ interviewTimeSlot.store_manager.location.name }}
+                                                    </option>
+                                                    <template v-for="location in locations">
+                                                        <option v-if="! interviewTimeSlot || interviewTimeSlot.store_manager.location.id !== location.id"
+                                                                :value="location.id">
+                                                            {{ location.name }}
+                                                        </option>
+                                                    </template>
+                                                </select>
+
+                                                <label for="timeslot" class="block text-xs font-medium leading-6 text-gray-900">
+                                                    Tijdslot
+                                                </label>
+                                                <select id="timeslot"
+                                                        class="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                        v-model="timeSlotForm.timeSlot" >
+                                                    <option v-if="interviewTimeSlot && interviewTimeSlot.store_manager.location.id === timeSlotForm.location"
+                                                            :value="interviewTimeSlot.id">
                                                         {{ interviewTimeSlot.start }}
                                                     </option>
-                                                    <option
-                                                        v-for="timeSlot in application.vacancy.location.manager?.available_time_slots"
-                                                        :value="timeSlot.id">
-                                                        {{ timeSlot.start }}
-                                                    </option>
+                                                    <template v-for="timeSlot in locations[timeSlotForm.location].manager.available_time_slots">
+                                                        <option v-if="! interviewTimeSlot || interviewTimeSlot.id !== timeSlot.id"
+                                                                :value="timeSlot.id">
+                                                            {{ timeSlot.start }}
+                                                        </option>
+                                                    </template>
                                                 </select>
                                                 <button
                                                     type="button"
@@ -208,6 +233,7 @@
     import Modal from '@/Components/Modal.vue';
 
     const props = defineProps({
+        locations: Object,
         application: Object,
         statuses: Object,
         interviewTimeSlot: Object
@@ -220,6 +246,7 @@
     });
 
     const timeSlotForm = useForm({
+        location: props.interviewTimeSlot?.store_manager?.location?.id || props.application.vacancy.location.id,
         timeSlot: props.interviewTimeSlot?.id,
     });
 

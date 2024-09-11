@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreApplicationRequest;
 use App\Http\Resources\HR\StatusResource;
 use App\Models\Application;
+use App\Models\Location;
 use App\Models\Status;
 use App\Models\Vacancy;
 use Illuminate\Http\Request;
@@ -28,16 +29,19 @@ class DashboardController extends Controller
 
     public function show_application(Application $application)
     {
+        $locations = Location::withWhereHas(
+            'manager.availableTimeSlots',
+            fn ($query) => $query->where('start', '>=', now())->orderBy('start')
+        )->get()->keyBy('id');
+
         $application->load([
-            'vacancy.location.manager.availableTimeSlots' => function ($query) {
-                $query->where('start', '>=', now())
-                    ->orderBy('start');
-            },
-            'interview.storeManagerTimeSlot',
+            'vacancy.location',
+            'interview.storeManagerTimeSlot.storeManager.location',
             'status'
         ]);
 
         return Inertia::modal('HR/Application', [
+            'locations' => $locations,
             'application' => $application,
             'statuses' =>  auth()->user()->role === 'store_manager'
                 // Afgewezen / hired if store manager
@@ -65,7 +69,7 @@ class DashboardController extends Controller
 
         $uploadedFile = $request->file('cv');
 
-        if($uploadedFile){
+        if ($uploadedFile){
             $data['resume'] = $uploadedFile->store('resumes', 'public');
         }
 

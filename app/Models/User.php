@@ -69,7 +69,7 @@ class User extends Authenticatable
         return $this->hasMany(StoreManagerTimeSlot::class);
     }
 
-    public function availableTimeSlots()
+    public function availableTimeSlots(): HasMany
     {
         return $this->hasMany(StoreManagerTimeSlot::class)
                 ->doesntHave('interview');

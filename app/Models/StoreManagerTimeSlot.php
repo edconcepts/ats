@@ -19,7 +19,7 @@ class StoreManagerTimeSlot extends Model
         'start' => 'datetime',
     ];
 
-    public function storeManager()
+    public function storeManager(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
