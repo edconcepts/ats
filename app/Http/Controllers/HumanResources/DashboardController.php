@@ -56,7 +56,7 @@ class DashboardController extends Controller
         return Inertia::modal('HR/AddApplication', [
             'defaultStatusId' => Arr::first(Arr::wrap(config('status.fixed_status_ids'))),
             'statuses' => Status::all(),
-            'vacancies' => Vacancy::with('location')->get(),
+            'vacancies' => Vacancy::with('location')->orderBy('location_id')->orderBy('title')->get(),
         ])->baseRoute('dashboard');
     }
 

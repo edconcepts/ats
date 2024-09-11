@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Overriding vue-select styling */
+.vs__dropdown-toggle,
+.vs__dropdown-toggle *,
+.vs__dropdown-menu,
+.vs__dropdown-menu * {
+    @apply text-sm leading-6 text-gray-900 !important;
+}
+
+.vs__dropdown-toggle {
+    @apply rounded-md border-0 ring-1 ring-inset ring-gray-300 !important;
+}
+
+.vs__dropdown-toggle:focus-within {
+    @apply ring-2 ring-indigo-600 !important;
+}
+
+:root {
+    --vs-controls-size: 0.75 !important;
+    --vs-dropdown-option--active-bg: rgb(79 70 229 / 0.5) !important;
+}
