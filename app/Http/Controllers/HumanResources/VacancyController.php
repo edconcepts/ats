@@ -19,9 +19,22 @@ class VacancyController extends Controller
     {
         $this->authorize('index', Vacancy::class);
 
+        $wpUser = config('services.wordpress.user');
+        $wpPassword = config('services.wordpress.pass');
+
+        // No credentials, returning database data
+        if (empty($wpUser) || empty($wpPassword)) {
+            return Inertia::render('HR/Vacancies/Overview',[
+                'locations' => Location::all(),
+                'vacancies' => Vacancy::all(),
+                'pages' => 1,
+                'current_page' => request()->input('page', 1),
+            ]);
+        }
+
         $req = Http::withBasicAuth(
-            config('services.wordpress.user'),
-            config('services.wordpress.pass')
+            $wpUser,
+            $wpPassword
         )->get(
             config('services.wordpress.base_url') . 'vacatures?per_page=100&status=draft,publish,pending&page=' . request()->get('page', 1)
         );
@@ -32,8 +45,8 @@ class VacancyController extends Controller
         if ($pages > 1) {
             for ($i = 2; $i <= $pages; $i++) {
                 $req = Http::withBasicAuth(
-                    config('services.wordpress.user'),
-                    config('services.wordpress.pass')
+                    $wpUser,
+                    $wpPassword
                 )->get(
                     config('services.wordpress.base_url') . 'vacatures?per_page=100&status=draft,publish,pending&page=' . $i
                 );
@@ -64,7 +77,19 @@ class VacancyController extends Controller
             'locations' => Location::all(),
             'vacancies' => $vacancies,
             'pages' => $pages,
-            'current_page' => request()->get('page', 1),
+            'current_page' => request()->input('page', 1),
+        ]);
+    }
+
+    public function create()
+    {
+        $this->authorize('create', Vacancy::class);
+
+        $getTaxonomiesAction = new GetTaxonomiesListAction();
+        $taxonomies = $getTaxonomiesAction->execute();
+
+        return Inertia::render('HR/Vacancies/Create', [
+            'taxonomies' => $taxonomies,
         ]);
     }
 
@@ -95,27 +120,35 @@ class VacancyController extends Controller
         }
     }
 
-    public function create()
-    {
-        $this->authorize('create', Vacancy::class);
-
-        $getTaxonomiesAction = new GetTaxonomiesListAction();
-        $taxonomies = $getTaxonomiesAction->execute();
-
-        return Inertia::render('HR/Vacancies/Create', [
-            'taxonomies' => $taxonomies,
-        ]);
-    }
-
     public function edit($vacancy_id)
     {
         $this->authorize('edit', Vacancy::class);
 
+        $wpUser = config('services.wordpress.user');
+        $wpPassword = config('services.wordpress.pass');
+
+        // No credentials, returning database data
+        if (empty($wpUser) || empty($wpPassword)) {
+            // Setting keys so page renders.
+            $vacancy = Vacancy::findOrFail($vacancy_id);
+            $vacancy->meta = [];
+            $vacancy->categorieen = [];
+            $vacancy->{'vacancy-location'} = [$vacancy->location->kik_id];
+
+            return Inertia::render('HR/Vacancies/Edit',[
+                'vacancy' => $vacancy,
+                'taxonomies' => [
+                    'job-boards' => [],
+                    'opleidingsniveau' => [],
+                ],
+            ]);
+        }
+
         $url = config('services.wordpress.base_url') . 'vacatures/' . $vacancy_id;
 
         $vacancy = Http::withBasicAuth(
-            config('services.wordpress.user'),
-            config('services.wordpress.pass')
+            $wpUser,
+            $wpPassword
         )->get($url)->json();
 
         $getTaxonomiesAction = new GetTaxonomiesListAction();
@@ -126,6 +159,7 @@ class VacancyController extends Controller
             'taxonomies' => $taxonomies,
         ]);
     }
+
     public function update(UpdateVacancyRequest $request, $vacancy_id)
     {
         $this->authorize('update', Vacancy::class);
@@ -153,7 +187,27 @@ class VacancyController extends Controller
             dd($e->getMessage());
         }
 
+    }
 
+    public function destroy($vacancy_id)
+    {
+        $this->authorize('delete', Vacancy::class);
+
+        Vacancy::find($vacancy_id)?->delete();
+
+        try {
+            $response = Http::withBasicAuth(
+                config('services.wordpress.user'),
+                config('services.wordpress.pass')
+            )->post(config('services.wordpress.base_url') . 'vacatures/' . $vacancy_id, [
+                'post_status' => 'trashed',
+            ]);
+
+        } catch (\Throwable $e) {
+            dd($e->getMessage());
+        }
+
+        return redirect()->route('vacancies.index');
     }
 
     public function changeStatus($vacancy_id, $status)

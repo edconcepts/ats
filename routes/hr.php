@@ -32,8 +32,8 @@ Route::as('statuses.')->prefix('statuses')->group(function () {
     Route::post('reorder', [StatusController::class, 'reorder'])->name('reorder');
 });
 
-Route::resource('/vacancies', VacancyController::class)->only([
-    'index', 'edit', 'store', 'create'
+Route::resource('/vacancies', VacancyController::class)->except([
+    'update', 'show'
 ])->middleware('role:admin');
 
 Route::post('/vacancies/{vacancy}/change-status/{status}', [VacancyController::class, 'changeStatus'])->name('vacancies.change-status')->middleware('role:admin');

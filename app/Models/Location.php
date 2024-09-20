@@ -17,7 +17,7 @@ class Location extends Model implements Importable
 
     public function vacancies(): HasMany
     {
-        return $this->hasMany(Vacancy::class, 'location_id','kik_id');
+        return $this->hasMany(Vacancy::class, 'location_id','kik_id')->withTrashed();
     }
 
     public function applications(): HasManyThrough

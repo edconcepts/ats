@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->timestamp('kik_date');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

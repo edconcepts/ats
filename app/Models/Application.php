@@ -29,7 +29,7 @@ class Application extends Model implements Importable
     // Relationships
     public function vacancy(): BelongsTo
     {
-        return $this->belongsTo(Vacancy::class, 'vacancy_id', 'kik_id');
+        return $this->belongsTo(Vacancy::class, 'vacancy_id', 'kik_id')->withTrashed();
     }
 
     public function status(): BelongsTo

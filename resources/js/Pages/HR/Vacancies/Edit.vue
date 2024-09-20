@@ -1,49 +1,53 @@
 <script setup>
-import Layout from '@/Layouts/Layout.vue';
-import {Head, useForm} from '@inertiajs/vue3';
-import {Link} from "@inertiajs/vue3";
-import {ref} from "vue";
-import {SwitchGroup, Switch, SwitchLabel} from "@headlessui/vue";
-import Multiselect from '@vueform/multiselect';
-import Datepicker from '@vuepic/vue-datepicker';
-import '@vuepic/vue-datepicker/dist/main.css';
-import { QuillEditor } from '@vueup/vue-quill'
-import '@vueup/vue-quill/dist/vue-quill.snow.css';
+    import Layout from '@/Layouts/Layout.vue';
+    import {Head, useForm} from '@inertiajs/vue3';
+    import {Link} from "@inertiajs/vue3";
+    import {ref} from "vue";
+    import {SwitchGroup, Switch, SwitchLabel} from "@headlessui/vue";
+    import Multiselect from '@vueform/multiselect';
+    import Datepicker from '@vuepic/vue-datepicker';
+    import '@vuepic/vue-datepicker/dist/main.css';
+    import { QuillEditor } from '@vueup/vue-quill'
+    import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
-const props = defineProps({
-    vacancy: Object,
-    taxonomies : Object
-});
+    const props = defineProps({
+        vacancy: Object,
+        taxonomies : Object
+    });
 
-const jobBoardMultiSelectOptions = ref([]);
-for (const item of props.taxonomies['job-boards']) {
-    jobBoardMultiSelectOptions.value.push({value:item.id, label:item.name});
-}
+    const jobBoardMultiSelectOptions = ref([]);
+    for (const item of props.taxonomies['job-boards']) {
+        jobBoardMultiSelectOptions.value.push({value:item.id, label:item.name});
+    }
 
-const opleidingniveausOptions = ref([]);
-for (const item of props.taxonomies['opleidingsniveau']) {
-    opleidingniveausOptions.value.push({value:item.id, label:item.name});
-}
+    const opleidingniveausOptions = ref([]);
+    for (const item of props.taxonomies['opleidingsniveau']) {
+        opleidingniveausOptions.value.push({value:item.id, label:item.name});
+    }
 
-const form = useForm({
-    title: props.vacancy.title.rendered,
-    end_date: props.vacancy.meta['_end-date'],
-    job_description: props.vacancy.meta['_job-description'],
-    // video_url: props.vacancy.meta.video,
-    _requirements: props.vacancy.meta._requirements,
-    opleidingsniveau: props.vacancy['opleidingsniveau'],
-    _responsibilities: props.vacancy.meta._responsibilities,
-    _salary: props.vacancy.meta._salary,
-    vacancyLocation: props.vacancy['vacancy-location'][0],
-    categorieen: props.vacancy.categorieen[0],
-    jobBoards: props.vacancy['job-boards'],
-    status: props.vacancy.status,
-});
+    const form = useForm({
+        title: props.vacancy.title.rendered,
+        end_date: props.vacancy.meta['_end-date'],
+        job_description: props.vacancy.meta['_job-description'],
+        // video_url: props.vacancy.meta.video,
+        _requirements: props.vacancy.meta._requirements,
+        opleidingsniveau: props.vacancy['opleidingsniveau'],
+        _responsibilities: props.vacancy.meta._responsibilities,
+        _salary: props.vacancy.meta._salary,
+        vacancyLocation: props.vacancy['vacancy-location'][0],
+        categorieen: props.vacancy.categorieen[0],
+        jobBoards: props.vacancy['job-boards'],
+        status: props.vacancy.status,
+    });
 
 
-const updateVacancy = (vacancy) => {
-    form.post(route('vacancies.update',vacancy));
-};
+    const updateVacancy = (vacancy) => {
+        form.post(route('vacancies.update',vacancy));
+    };
+
+    const deleteVacancy = (vacancy) => {
+        form.delete(route('vacancies.destroy',vacancy));
+    };
 
 
 </script>
@@ -58,7 +62,8 @@ const updateVacancy = (vacancy) => {
                     <h1 class="text-base font-semibold leading-6 text-gray-900">Vacature</h1>
                 </div>
                 <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-
+                    <Link @click="deleteVacancy(vacancy)" type="button"
+                          class="block rounded-md bg-red-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Vacature verwijderen</Link>
                 </div>
             </div>
             <div class="mt-8 flow-root">
@@ -247,9 +252,9 @@ const updateVacancy = (vacancy) => {
                                 <div class="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
                                     <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
                                     <button
-                                    type="submit"
-                                    class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
-                                    :disabled="form.processing"
+                                        type="submit"
+                                        class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+                                        :disabled="form.processing"
                                     >Opslaan</button>
                                 </div>
                             </div>
