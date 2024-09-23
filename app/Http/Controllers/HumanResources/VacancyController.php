@@ -194,7 +194,7 @@ class VacancyController extends Controller
         $this->authorize('delete', Vacancy::class);
 
         Vacancy::find($vacancy_id)?->delete();
-        $this->changeStatus($vacancy_id, 'trashed');
+        $this->changeStatus($vacancy_id, 'trash');
 
         return redirect()->route('vacancies.index');
     }
