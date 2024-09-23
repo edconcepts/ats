@@ -24,7 +24,7 @@ class VacancyController extends Controller
 
         // No credentials, returning database data
         if (empty($wpUser) || empty($wpPassword)) {
-            return Inertia::render('HR/Vacancies/Overview',[
+            return Inertia::render('HR/Vacancies/Overview', [
                 'locations' => Location::all(),
                 'vacancies' => Vacancy::all(),
                 'pages' => 1,
@@ -73,7 +73,7 @@ class VacancyController extends Controller
         }
 
 
-        return Inertia::render('HR/Vacancies/Overview',[
+        return Inertia::render('HR/Vacancies/Overview', [
             'locations' => Location::all(),
             'vacancies' => $vacancies,
             'pages' => $pages,
@@ -135,7 +135,7 @@ class VacancyController extends Controller
             $vacancy->categorieen = [];
             $vacancy->{'vacancy-location'} = [$vacancy->location->kik_id];
 
-            return Inertia::render('HR/Vacancies/Edit',[
+            return Inertia::render('HR/Vacancies/Edit', [
                 'vacancy' => $vacancy,
                 'taxonomies' => [
                     'job-boards' => [],
@@ -194,18 +194,7 @@ class VacancyController extends Controller
         $this->authorize('delete', Vacancy::class);
 
         Vacancy::find($vacancy_id)?->delete();
-
-        try {
-            $response = Http::withBasicAuth(
-                config('services.wordpress.user'),
-                config('services.wordpress.pass')
-            )->post(config('services.wordpress.base_url') . 'vacatures/' . $vacancy_id, [
-                'post_status' => 'trashed',
-            ]);
-
-        } catch (\Throwable $e) {
-            dd($e->getMessage());
-        }
+        $this->changeStatus($vacancy_id, 'trashed');
 
         return redirect()->route('vacancies.index');
     }
